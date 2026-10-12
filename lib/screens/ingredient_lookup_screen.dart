@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../models/food.dart';
@@ -28,17 +30,46 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
   /// still matches, so an older, slower search can't overwrite a newer one.
   int _searchId = 0;
 
+  /// Waits until the user stops typing before searching (debounce).
+  Timer? _debounce;
+  static const _debounceDelay = Duration(milliseconds: 500);
+  static const _minQueryLength = 2;
+
   @override
   void dispose() {
+    _debounce?.cancel();
     _controller.dispose();
     super.dispose();
   }
 
-  Future<void> _search(String query) async {
+  /// Runs on every keystroke. Restarts the 500 ms timer, so the search only
+  /// fires once the user has paused typing.
+  void _onQueryChanged(String text) {
+    _debounce?.cancel();
+    final trimmed = text.trim();
+
+    if (trimmed.isEmpty) {
+      // Box cleared: drop any search still in flight and go back to idle.
+      _searchId++;
+      setState(() => _status = _LookupStatus.idle);
+      return;
+    }
+    if (trimmed.length < _minQueryLength) return;
+
+    _debounce = Timer(
+      _debounceDelay,
+      () => _search(trimmed, hideKeyboard: false),
+    );
+  }
+
+  /// Searches right away. Used by the Enter key, the arrow button, Retry,
+  /// and the debounce timer. Typing keeps the keyboard open.
+  Future<void> _search(String query, {bool hideKeyboard = true}) async {
+    _debounce?.cancel();
     final trimmed = query.trim();
     if (trimmed.isEmpty) return;
 
-    FocusScope.of(context).unfocus();
+    if (hideKeyboard) FocusScope.of(context).unfocus();
     _lastQuery = trimmed;
     final searchId = ++_searchId;
     setState(() => _status = _LookupStatus.loading);
@@ -112,6 +143,7 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
     return TextField(
       controller: _controller,
       textInputAction: TextInputAction.search,
+      onChanged: _onQueryChanged,
       onSubmitted: _search,
       decoration: InputDecoration(
         hintText: 'Search an ingredient, e.g. egg',
