@@ -60,7 +60,7 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
       // Anything unexpected, such as a malformed response.
       if (!mounted || searchId != _searchId) return;
       setState(() {
-        _errorMessage = 'Something went wrong. Try again.';
+        _errorMessage = 'Something went wrong. Please try again.';
         _status = _LookupStatus.error;
       });
     }

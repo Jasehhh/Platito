@@ -61,7 +61,7 @@ class UsdaService {
     try {
       response = await _client.get(url).timeout(_timeout);
     } on TimeoutException {
-      throw const UsdaException('USDA request timed out. Try again.');
+      throw const UsdaException('The request timed out. Please try again.');
     } on http.ClientException {
       throw const UsdaException('No internet connection.');
     }
