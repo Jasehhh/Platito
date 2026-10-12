@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
@@ -18,10 +19,8 @@ class UsdaException implements Exception {
 /// Screens and providers call this class instead of using http directly,
 /// so all API code lives in one place.
 ///
-/// Callers should catch:
-/// - UsdaException: bad status code or missing API key
-/// - TimeoutException (dart:async): the request took longer than 10 seconds
-/// - http.ClientException / SocketException: no internet connection
+/// Callers only need to catch UsdaException. It covers a missing API key,
+/// a bad status code, no internet connection, and a timeout.
 class UsdaService {
   /// [client] can be replaced with a fake in tests.
   UsdaService({http.Client? client}) : _client = client ?? http.Client();
@@ -56,7 +55,16 @@ class UsdaService {
       'api_key': _apiKey,
     });
 
-    final response = await _client.get(url).timeout(_timeout);
+    // These errors are rethrown as UsdaException because the original
+    // ClientException message contains the full URL, including the API key.
+    final http.Response response;
+    try {
+      response = await _client.get(url).timeout(_timeout);
+    } on TimeoutException {
+      throw const UsdaException('USDA request timed out. Try again.');
+    } on http.ClientException {
+      throw const UsdaException('No internet connection.');
+    }
 
     if (response.statusCode != 200) {
       throw UsdaException(
