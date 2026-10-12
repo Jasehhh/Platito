@@ -63,7 +63,7 @@ class UsdaService {
     } on TimeoutException {
       throw const UsdaException('The request timed out. Please try again.');
     } on http.ClientException {
-      throw const UsdaException('No internet connection.');
+      throw const UsdaException("Can't reach USDA. Check your connection.");
     }
 
     if (response.statusCode != 200) {
