@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import 'providers/recipe_provider.dart';
 import 'screens/main_shell.dart';
 import 'screens/recipe_detail_screen.dart';
 import 'screens/recipe_form_screen.dart';
@@ -16,16 +18,26 @@ class PlatitoApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Platito',
-      theme: AppTheme.light,
-      initialRoute: Routes.shell,
-      routes: {
-        Routes.shell: (context) => const MainShell(),
-        Routes.recipeList: (context) => const RecipeListScreen(),
-        Routes.recipeDetail: (context) => const RecipeDetailScreen(),
-        Routes.recipeForm: (context) => const RecipeFormScreen(),
-      },
+    return MultiProvider(
+      providers: [
+        // lazy: false creates the provider at startup instead of on first
+        // use, so recipes and nutrition start loading right away.
+        ChangeNotifierProvider(
+          create: (context) => RecipeProvider()..load(),
+          lazy: false,
+        ),
+      ],
+      child: MaterialApp(
+        title: 'Platito',
+        theme: AppTheme.light,
+        initialRoute: Routes.shell,
+        routes: {
+          Routes.shell: (context) => const MainShell(),
+          Routes.recipeList: (context) => const RecipeListScreen(),
+          Routes.recipeDetail: (context) => const RecipeDetailScreen(),
+          Routes.recipeForm: (context) => const RecipeFormScreen(),
+        },
+      ),
     );
   }
 }
