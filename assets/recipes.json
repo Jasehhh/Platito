@@ -1,0 +1,171 @@
+[
+  {
+    "id": "tortang-tuna",
+    "name": "Tortang Tuna",
+    "category": "High Protein",
+    "servings": 2,
+    "emoji": "🍳",
+    "ingredients": [
+      { "name": "Canned tuna in water, drained", "fdcId": 334194, "grams": 130, "price": 42 },
+      { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
+      { "name": "Onion", "fdcId": 170000, "grams": 30, "price": 5 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Drain the tuna and flake it with a fork.",
+      "Beat the eggs, then mix in the tuna, minced garlic, and chopped onion.",
+      "Heat oil in a pan and pour in half the mixture to form a patty.",
+      "Cook 2 to 3 minutes per side until golden. Repeat with the rest."
+    ]
+  },
+  {
+    "id": "ginisang-monggo",
+    "name": "Ginisang Monggo",
+    "category": "Budget Meals",
+    "servings": 4,
+    "emoji": "🫘",
+    "ingredients": [
+      { "name": "Mung beans (monggo), dry", "fdcId": 174256, "grams": 250, "price": 35 },
+      { "name": "Malunggay leaves", "fdcId": 168416, "grams": 30, "price": 5 },
+      { "name": "Tomato", "fdcId": 170457, "grams": 100, "price": 10 },
+      { "name": "Onion", "fdcId": 170000, "grams": 40, "price": 6 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Boil the monggo in 6 cups of water for 30 to 40 minutes until soft.",
+      "In another pot, saute garlic, onion, and tomato in oil.",
+      "Add the cooked monggo with its water and simmer for 5 minutes.",
+      "Stir in the malunggay leaves, season with salt, and serve."
+    ]
+  },
+  {
+    "id": "ginisang-sardinas-with-egg",
+    "name": "Ginisang Sardinas with Egg",
+    "category": "Budget Meals",
+    "servings": 2,
+    "emoji": "🐟",
+    "ingredients": [
+      { "name": "Sardines in tomato sauce", "fdcId": 175140, "grams": 155, "price": 26 },
+      { "name": "Egg", "fdcId": 171287, "grams": 100, "price": 18 },
+      { "name": "Onion", "fdcId": 170000, "grams": 30, "price": 5 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 10, "price": 2 }
+    ],
+    "steps": [
+      "Saute garlic and onion in oil until soft.",
+      "Add the sardines with the sauce and break them up lightly.",
+      "Pour in the beaten eggs and stir gently until the eggs are set.",
+      "Serve hot with rice."
+    ]
+  },
+  {
+    "id": "tokwat-itlog",
+    "name": "Tokwa't Itlog",
+    "category": "Bulking",
+    "servings": 2,
+    "emoji": "🥚",
+    "ingredients": [
+      { "name": "Firm tofu (tokwa)", "fdcId": 172475, "grams": 300, "price": 30 },
+      { "name": "Egg", "fdcId": 171287, "grams": 100, "price": 18 },
+      { "name": "White rice, uncooked", "fdcId": 168877, "grams": 200, "price": 11 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 30, "price": 3 },
+      { "name": "Vinegar", "fdcId": 172237, "grams": 30, "price": 2 },
+      { "name": "Onion", "fdcId": 170000, "grams": 30, "price": 5 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 20, "price": 4 }
+    ],
+    "steps": [
+      "Cook the rice. Hard-boil the eggs for 10 minutes, then peel and slice.",
+      "Cut the tofu into cubes and fry in oil until golden on all sides.",
+      "Mix soy sauce, vinegar, and chopped onion to make the sawsawan.",
+      "Serve the tofu and eggs over rice with the sawsawan on top."
+    ]
+  },
+  {
+    "id": "chicken-breast-adobo",
+    "name": "Chicken Breast Adobo",
+    "category": "High Protein",
+    "servings": 3,
+    "emoji": "🍗",
+    "ingredients": [
+      { "name": "Chicken breast, skinless", "fdcId": 171077, "grams": 500, "price": 145 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 45, "price": 5 },
+      { "name": "Vinegar", "fdcId": 172237, "grams": 45, "price": 3 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 20, "price": 3 },
+      { "name": "Black pepper", "fdcId": 170931, "grams": 2, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Cut the chicken breast into chunks.",
+      "Saute the garlic in oil, then add the chicken and brown it lightly.",
+      "Add soy sauce, vinegar, black pepper, and half a cup of water.",
+      "Simmer uncovered for 20 minutes until the sauce thickens."
+    ]
+  },
+  {
+    "id": "chicken-tinola",
+    "name": "Chicken Tinola",
+    "category": "Cutting",
+    "servings": 4,
+    "emoji": "🍲",
+    "ingredients": [
+      { "name": "Chicken, meat only", "fdcId": 171052, "grams": 500, "price": 120 },
+      { "name": "Green papaya", "fdcId": 169926, "grams": 300, "price": 20 },
+      { "name": "Malunggay leaves", "fdcId": 168416, "grams": 30, "price": 5 },
+      { "name": "Ginger", "fdcId": 169231, "grams": 20, "price": 4 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 10, "price": 2 }
+    ],
+    "steps": [
+      "Saute ginger, garlic, and onion in oil.",
+      "Add the chicken and cook until it is no longer pink.",
+      "Pour in 5 cups of water and simmer for 20 minutes.",
+      "Add the papaya and cook for 5 minutes, then add malunggay and serve."
+    ]
+  },
+  {
+    "id": "arroz-caldo",
+    "name": "Arroz Caldo",
+    "category": "Bulking",
+    "servings": 4,
+    "emoji": "🍚",
+    "ingredients": [
+      { "name": "Glutinous rice (malagkit), uncooked", "fdcId": 168883, "grams": 250, "price": 23 },
+      { "name": "Chicken thigh, meat only", "fdcId": 173627, "grams": 400, "price": 100 },
+      { "name": "Egg", "fdcId": 171287, "grams": 200, "price": 36 },
+      { "name": "Ginger", "fdcId": 169231, "grams": 30, "price": 6 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 20, "price": 3 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Saute ginger, garlic, and onion in oil, then add the chicken.",
+      "Add the rinsed rice and stir for 2 minutes.",
+      "Pour in 8 cups of water and simmer for 30 minutes, stirring often.",
+      "Hard-boil the eggs, then serve one on top of each bowl."
+    ]
+  },
+  {
+    "id": "ginisang-okra-with-egg",
+    "name": "Ginisang Okra with Egg",
+    "category": "Cutting",
+    "servings": 2,
+    "emoji": "🥬",
+    "ingredients": [
+      { "name": "Okra", "fdcId": 169260, "grams": 250, "price": 25 },
+      { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
+      { "name": "Tomato", "fdcId": 170457, "grams": 80, "price": 8 },
+      { "name": "Onion", "fdcId": 170000, "grams": 30, "price": 5 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 10, "price": 2 }
+    ],
+    "steps": [
+      "Slice the okra into rounds.",
+      "Saute garlic, onion, and tomato in oil until soft.",
+      "Add the okra and cook for 5 minutes.",
+      "Pour in the beaten eggs and stir until set. Season with salt."
+    ]
+  }
+]
