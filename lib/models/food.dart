@@ -35,6 +35,19 @@ class Nutrient {
       value: (json['value'] as num?)?.toDouble() ?? 0.0,
     );
   }
+
+  /// Builds a Nutrient from one item of "foodNutrients" in a
+  /// /fdc/v1/foods response. There the ID, name, and unit sit inside a
+  /// nested "nutrient" object, and the value is called "amount".
+  factory Nutrient.fromDetailJson(Map<String, dynamic> json) {
+    final info = json['nutrient'] as Map<String, dynamic>? ?? {};
+    return Nutrient(
+      id: (info['id'] as num?)?.toInt() ?? 0,
+      name: info['name'] as String? ?? '',
+      unit: info['unitName'] as String? ?? '',
+      value: (json['amount'] as num?)?.toDouble() ?? 0.0,
+    );
+  }
 }
 
 /// One food from a USDA search result. Nutrient values are per 100 g.
@@ -60,6 +73,20 @@ class Food {
       dataType: json['dataType'] as String? ?? '',
       nutrients: rawNutrients
           .map((item) => Nutrient.fromJson(item as Map<String, dynamic>))
+          .toList(),
+    );
+  }
+
+  /// Builds a Food from one item of a /fdc/v1/foods (lookup by ID)
+  /// response. Its nutrients use a different shape than search results.
+  factory Food.fromDetailJson(Map<String, dynamic> json) {
+    final rawNutrients = json['foodNutrients'] as List<dynamic>? ?? [];
+    return Food(
+      fdcId: (json['fdcId'] as num).toInt(),
+      name: json['description'] as String? ?? 'Unknown food',
+      dataType: json['dataType'] as String? ?? '',
+      nutrients: rawNutrients
+          .map((item) => Nutrient.fromDetailJson(item as Map<String, dynamic>))
           .toList(),
     );
   }
