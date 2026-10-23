@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 
 /// Green gradient header for the Home screen (DESIGN.md section 6.1):
-/// logo row, a Filipino greeting, and a search bar that overlaps the
+/// title row, a Filipino greeting, and a search bar that overlaps the
 /// header's bottom edge by half its height.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, this.onSearchTap, this.onFilterTap});
@@ -57,7 +57,7 @@ class HomeHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const _LogoRow(),
+                  const _TitleRow(),
                   const SizedBox(height: 20),
                   Text(
                     greetingFor(DateTime.now()),
@@ -95,25 +95,15 @@ class HomeHeader extends StatelessWidget {
   }
 }
 
-/// Logo mark + "Platito" on the left, a glass bell button on the right.
-class _LogoRow extends StatelessWidget {
-  const _LogoRow();
+/// "Platito" on the left, a glass bell button on the right.
+class _TitleRow extends StatelessWidget {
+  const _TitleRow();
 
   @override
   Widget build(BuildContext context) {
     final glass = Colors.white.withValues(alpha: 0.18);
     return Row(
       children: [
-        Container(
-          width: 38,
-          height: 38,
-          decoration: BoxDecoration(
-            color: glass,
-            borderRadius: BorderRadius.circular(12),
-          ),
-          child: const Icon(Icons.rice_bowl, color: Colors.white, size: 22),
-        ),
-        const SizedBox(width: 10),
         const Text(
           'Platito',
           style: TextStyle(
