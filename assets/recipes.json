@@ -5,6 +5,8 @@
     "category": "High Protein",
     "servings": 2,
     "emoji": "🍳",
+    "image": "assets/images/recipes/tortang-tuna.jpg",
+    "imageCredit": "Photo: Judgefloro, CC0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Canned tuna in water, drained", "fdcId": 334194, "grams": 130, "price": 42 },
       { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
@@ -25,6 +27,8 @@
     "category": "Budget Meals",
     "servings": 4,
     "emoji": "🫘",
+    "image": "assets/images/recipes/ginisang-monggo.jpg",
+    "imageCredit": "Photo: Pandakekok9, CC0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Mung beans (monggo), dry", "fdcId": 174256, "grams": 250, "price": 35 },
       { "name": "Malunggay leaves", "fdcId": 168416, "grams": 30, "price": 5 },
@@ -46,6 +50,8 @@
     "category": "Budget Meals",
     "servings": 2,
     "emoji": "🐟",
+    "image": "assets/images/recipes/ginisang-sardinas-with-egg.jpg",
+    "imageCredit": "Photo: ProjectManhattan, CC BY-SA 3.0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Sardines in tomato sauce", "fdcId": 175140, "grams": 155, "price": 26 },
       { "name": "Egg", "fdcId": 171287, "grams": 100, "price": 18 },
@@ -66,6 +72,8 @@
     "category": "Bulking",
     "servings": 2,
     "emoji": "🥚",
+    "image": "assets/images/recipes/tokwat-itlog.jpg",
+    "imageCredit": "Photo: Choo Yut Shing, CC BY 2.0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Firm tofu (tokwa)", "fdcId": 172475, "grams": 300, "price": 30 },
       { "name": "Egg", "fdcId": 171287, "grams": 100, "price": 18 },
@@ -88,6 +96,8 @@
     "category": "High Protein",
     "servings": 3,
     "emoji": "🍗",
+    "image": "assets/images/recipes/chicken-breast-adobo.jpg",
+    "imageCredit": "Photo: dbgg1979, CC BY 2.0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Chicken breast, skinless", "fdcId": 171077, "grams": 500, "price": 145 },
       { "name": "Soy sauce", "fdcId": 174277, "grams": 45, "price": 5 },
@@ -109,6 +119,8 @@
     "category": "Cutting",
     "servings": 4,
     "emoji": "🍲",
+    "image": "assets/images/recipes/chicken-tinola.jpg",
+    "imageCredit": "Photo: Obsidian Soul, CC0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Chicken, meat only", "fdcId": 171052, "grams": 500, "price": 120 },
       { "name": "Green papaya", "fdcId": 169926, "grams": 300, "price": 20 },
@@ -131,6 +143,8 @@
     "category": "Bulking",
     "servings": 4,
     "emoji": "🍚",
+    "image": "assets/images/recipes/arroz-caldo.jpg",
+    "imageCredit": "Photo: Wide Awake!, CC BY 4.0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Glutinous rice (malagkit), uncooked", "fdcId": 168883, "grams": 250, "price": 23 },
       { "name": "Chicken thigh, meat only", "fdcId": 173627, "grams": 400, "price": 100 },
@@ -153,6 +167,8 @@
     "category": "Cutting",
     "servings": 2,
     "emoji": "🥬",
+    "image": "assets/images/recipes/ginisang-okra-with-egg.jpg",
+    "imageCredit": "Photo: Raymund Macaalay, CC BY-SA 4.0, via Wikimedia Commons",
     "ingredients": [
       { "name": "Okra", "fdcId": 169260, "grams": 250, "price": 25 },
       { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
