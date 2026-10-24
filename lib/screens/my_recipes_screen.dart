@@ -5,22 +5,17 @@ import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
 import '../theme/app_colors.dart';
 import '../utils/constants.dart';
+import '../utils/formatters.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/favorite_button.dart';
+import '../widgets/recipe_image.dart';
 import '../widgets/recipe_value_card.dart';
 
-/// The user's own recipes (with edit and delete) and their favorites,
-/// switched with a segmented toggle, plus a "New recipe" button above
+/// The user's favorites as a row of photo cards, then the recipes they
+/// made with edit and delete buttons, and a "New recipe" button above
 /// the dock.
-class MyRecipesScreen extends StatefulWidget {
+class MyRecipesScreen extends StatelessWidget {
   const MyRecipesScreen({super.key});
-
-  @override
-  State<MyRecipesScreen> createState() => _MyRecipesScreenState();
-}
-
-class _MyRecipesScreenState extends State<MyRecipesScreen> {
-  /// false shows My Recipes, true shows Favorites.
-  bool _showFavorites = false;
 
   Future<void> _confirmDelete(BuildContext context, Recipe recipe) async {
     final provider = context.read<RecipeProvider>();
@@ -46,15 +41,19 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
     if (confirmed == true) await provider.deleteRecipe(recipe.id);
   }
 
-  void _openDetail(Recipe recipe) {
+  void _openDetail(BuildContext context, Recipe recipe) {
     Navigator.pushNamed(context, Routes.recipeDetail, arguments: recipe);
+  }
+
+  void _openForm(BuildContext context, [Recipe? recipe]) {
+    Navigator.pushNamed(context, Routes.recipeForm, arguments: recipe);
   }
 
   @override
   Widget build(BuildContext context) {
     final provider = context.watch<RecipeProvider>();
-    final myRecipes = provider.userRecipes;
     final favorites = provider.favoriteRecipes;
+    final myRecipes = provider.userRecipes;
 
     return Scaffold(
       body: SafeArea(
@@ -63,20 +62,62 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
           padding: const EdgeInsets.fromLTRB(18, 16, 18, 90),
           children: [
             const _LargeTitle(),
-            const SizedBox(height: 16),
-            _SegmentedToggle(
-              labels: [
-                'My Recipes · ${myRecipes.length}',
-                'Favorites · ${favorites.length}',
-              ],
-              selectedIndex: _showFavorites ? 1 : 0,
-              onChanged: (index) => setState(() => _showFavorites = index == 1),
-            ),
-            const SizedBox(height: 16),
-            if (_showFavorites)
-              ..._buildFavorites(favorites)
+            _SectionHeader(title: 'Favorites', count: favorites.length),
+            if (favorites.isEmpty)
+              const _FavoritesHint()
             else
-              ..._buildMyRecipes(context, myRecipes),
+              SizedBox(
+                height: 200,
+                child: ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  // Let the row run to the screen edge while the first card
+                  // still lines up with the page padding.
+                  clipBehavior: Clip.none,
+                  itemCount: favorites.length,
+                  separatorBuilder: (_, _) => const SizedBox(width: 12),
+                  itemBuilder: (context, index) => _FavoriteCard(
+                    recipe: favorites[index],
+                    onTap: () => _openDetail(context, favorites[index]),
+                  ),
+                ),
+              ),
+            _SectionHeader(title: 'Made by you', count: myRecipes.length),
+            if (myRecipes.isEmpty)
+              EmptyState(
+                icon: Icons.menu_book_outlined,
+                title: 'No recipes yet',
+                message:
+                    'Add your own budget meal and see its protein per peso.',
+                actionLabel: 'Create a recipe',
+                onAction: () => _openForm(context),
+              ),
+            for (final recipe in myRecipes) ...[
+              RecipeValueCard(
+                recipe: recipe,
+                onTap: () => _openDetail(context, recipe),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    _SmallActionButton(
+                      icon: Icons.edit_outlined,
+                      tooltip: 'Edit',
+                      background: AppColors.background,
+                      color: AppColors.textMuted,
+                      onPressed: () => _openForm(context, recipe),
+                    ),
+                    const SizedBox(width: 6),
+                    _SmallActionButton(
+                      icon: Icons.delete_outline,
+                      tooltip: 'Delete',
+                      background: AppColors.errorLight,
+                      color: AppColors.error,
+                      onPressed: () => _confirmDelete(context, recipe),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 10),
+            ],
           ],
         ),
       ),
@@ -85,7 +126,7 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
       floatingActionButton: Padding(
         padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
         child: FloatingActionButton.extended(
-          onPressed: () => Navigator.pushNamed(context, Routes.recipeForm),
+          onPressed: () => _openForm(context),
           icon: const Icon(Icons.add),
           label: const Text(
             'New recipe',
@@ -94,71 +135,6 @@ class _MyRecipesScreenState extends State<MyRecipesScreen> {
         ),
       ),
     );
-  }
-
-  List<Widget> _buildMyRecipes(BuildContext context, List<Recipe> recipes) {
-    if (recipes.isEmpty) {
-      return const [
-        EmptyState(
-          icon: Icons.menu_book_outlined,
-          title: 'No recipes yet',
-          message: 'Tap + to add your own budget meal.',
-        ),
-      ];
-    }
-    return [
-      for (final recipe in recipes) ...[
-        RecipeValueCard(
-          recipe: recipe,
-          onTap: () => _openDetail(recipe),
-          trailing: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              _SmallActionButton(
-                icon: Icons.edit_outlined,
-                tooltip: 'Edit',
-                background: AppColors.background,
-                color: AppColors.textMuted,
-                onPressed: () => Navigator.pushNamed(
-                  context,
-                  Routes.recipeForm,
-                  arguments: recipe,
-                ),
-              ),
-              const SizedBox(width: 6),
-              _SmallActionButton(
-                icon: Icons.delete_outline,
-                tooltip: 'Delete',
-                background: AppColors.errorLight,
-                color: AppColors.error,
-                onPressed: () => _confirmDelete(context, recipe),
-              ),
-            ],
-          ),
-        ),
-        const SizedBox(height: 10),
-      ],
-    ];
-  }
-
-  /// Favorite cards keep their heart, so tapping it removes the recipe
-  /// from this list.
-  List<Widget> _buildFavorites(List<Recipe> recipes) {
-    if (recipes.isEmpty) {
-      return const [
-        EmptyState(
-          icon: Icons.favorite_border,
-          title: 'No favorites yet',
-          message: 'Tap the heart on any recipe to save it here.',
-        ),
-      ];
-    }
-    return [
-      for (final recipe in recipes) ...[
-        RecipeValueCard(recipe: recipe, onTap: () => _openDetail(recipe)),
-        const SizedBox(height: 10),
-      ],
-    ];
   }
 }
 
@@ -177,7 +153,7 @@ class _LargeTitle extends StatelessWidget {
         ),
         SizedBox(height: 2),
         Text(
-          'Your own meals and favorites',
+          'Meals you saved and meals you made',
           style: TextStyle(fontSize: 12, color: AppColors.textMuted),
         ),
       ],
@@ -185,66 +161,131 @@ class _LargeTitle extends StatelessWidget {
   }
 }
 
-/// DESIGN.md segmented toggle: a light track with the selected segment
-/// shown as a white pill.
-class _SegmentedToggle extends StatelessWidget {
-  const _SegmentedToggle({
-    required this.labels,
-    required this.selectedIndex,
-    required this.onChanged,
-  });
+class _SectionHeader extends StatelessWidget {
+  const _SectionHeader({required this.title, required this.count});
 
-  final List<String> labels;
-  final int selectedIndex;
-  final ValueChanged<int> onChanged;
+  final String title;
+  final int count;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 22, bottom: 10),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.end,
+        children: [
+          Text(
+            title,
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+          ),
+          const SizedBox(width: 8),
+          Text(
+            '$count',
+            style: const TextStyle(fontSize: 14, color: AppColors.textMuted),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// Small prompt shown when there are no favorites yet.
+class _FavoritesHint extends StatelessWidget {
+  const _FavoritesHint();
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.all(4),
+      padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: const Color(0xFFE7EEEA),
-        borderRadius: BorderRadius.circular(14),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(18),
       ),
-      child: Row(
+      child: const Row(
         children: [
-          for (var i = 0; i < labels.length; i++)
-            Expanded(
-              child: GestureDetector(
-                onTap: () => onChanged(i),
-                child: AnimatedContainer(
-                  duration: const Duration(milliseconds: 200),
-                  height: 40,
-                  alignment: Alignment.center,
-                  decoration: BoxDecoration(
-                    color: i == selectedIndex ? AppColors.surface : null,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: i == selectedIndex
-                        ? const [
-                            BoxShadow(
-                              color: Color(0x14000000),
-                              offset: Offset(0, 2),
-                              blurRadius: 6,
-                            ),
-                          ]
-                        : null,
-                  ),
-                  child: Text(
-                    labels[i],
-                    style: TextStyle(
-                      fontSize: 13.5,
-                      fontWeight: i == selectedIndex
-                          ? FontWeight.bold
-                          : FontWeight.normal,
-                      color: i == selectedIndex
-                          ? AppColors.primaryDark
-                          : AppColors.textMuted,
+          Icon(Icons.favorite_border, color: AppColors.iconInactive),
+          SizedBox(width: 12),
+          Expanded(
+            child: Text(
+              'Tap the heart on any recipe to keep it here.',
+              style: TextStyle(fontSize: 13, color: AppColors.textMuted),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+/// A favorite as a tall photo card with its name and protein per peso.
+class _FavoriteCard extends StatelessWidget {
+  const _FavoriteCard({required this.recipe, required this.onTap});
+
+  final Recipe recipe;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final proteinPerPeso = context.watch<RecipeProvider>().proteinPerPesoFor(
+      recipe,
+    );
+
+    return SizedBox(
+      width: 156,
+      child: Material(
+        color: AppColors.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(18),
+          side: const BorderSide(color: AppColors.border),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(
+                height: 130,
+                child: Stack(
+                  fit: StackFit.expand,
+                  children: [
+                    RecipeImage(recipe: recipe, emojiSize: 48),
+                    Positioned(
+                      top: 8,
+                      right: 8,
+                      child: FavoriteButton(recipe: recipe, floating: true),
                     ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(12, 10, 12, 0),
+                child: Text(
+                  recipe.name,
+                  maxLines: 2,
+                  overflow: TextOverflow.ellipsis,
+                  style: const TextStyle(
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
                   ),
                 ),
               ),
-            ),
-        ],
+              if (proteinPerPeso != null)
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(12, 2, 12, 0),
+                  child: Text(
+                    formatProteinPerPeso(proteinPerPeso),
+                    style: const TextStyle(
+                      fontSize: 12,
+                      fontWeight: FontWeight.bold,
+                      color: AppColors.primary,
+                    ),
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }
