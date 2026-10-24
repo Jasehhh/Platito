@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 
 import '../models/food.dart';
 import '../models/recipe.dart';
+import '../services/storage_service.dart';
 import '../services/usda_service.dart';
 import '../utils/nutrition_calculator.dart';
 
@@ -18,13 +19,18 @@ enum RecipeSort { protein, cost, proteinPerPeso }
 /// the recipes still show and their nutrition is reported as missing.
 class RecipeProvider extends ChangeNotifier {
   /// [usdaService] can be replaced with a fake in tests.
-  RecipeProvider({UsdaService? usdaService})
-    : _usdaService = usdaService ?? UsdaService();
+  RecipeProvider({UsdaService? usdaService, StorageService? storageService})
+    : _usdaService = usdaService ?? UsdaService(),
+      _storageService = storageService ?? StorageService();
 
   final UsdaService _usdaService;
+  final StorageService _storageService;
 
-  /// One list for built-in recipes now and user recipes later.
-  final List<Recipe> _recipes = [];
+  /// Recipes from assets/recipes.json. These are read-only.
+  final List<Recipe> _builtInRecipes = [];
+
+  /// Recipes the user created. Saved on the device by [_storageService].
+  final List<Recipe> _userRecipes = [];
 
   /// USDA food for each ingredient fdcId that has been fetched.
   final Map<int, Food> _foods = {};
@@ -34,9 +40,26 @@ class RecipeProvider extends ChangeNotifier {
 
   bool get isLoading => _isLoading;
   String? get errorMessage => _errorMessage;
-  List<Recipe> get recipes => List.unmodifiable(_recipes);
 
-  /// Loads assets/recipes.json, then fetches nutrition for its ingredients.
+  /// Built-in and user recipes together.
+  List<Recipe> get recipes =>
+      List.unmodifiable([..._builtInRecipes, ..._userRecipes]);
+  List<Recipe> get userRecipes => List.unmodifiable(_userRecipes);
+
+  bool isUserRecipe(Recipe recipe) =>
+      _userRecipes.any((item) => item.id == recipe.id);
+
+  /// The current version of the recipe with [id], or null if it was
+  /// deleted. Screens use it so they show edits right away.
+  Recipe? recipeById(String id) {
+    for (final recipe in recipes) {
+      if (recipe.id == id) return recipe;
+    }
+    return null;
+  }
+
+  /// Loads assets/recipes.json and the saved user recipes, then fetches
+  /// nutrition for their ingredients.
   Future<void> load() async {
     if (_isLoading) return;
     _isLoading = true;
@@ -46,11 +69,14 @@ class RecipeProvider extends ChangeNotifier {
     try {
       final text = await rootBundle.loadString('assets/recipes.json');
       final items = jsonDecode(text) as List<dynamic>;
-      _recipes
+      _builtInRecipes
         ..clear()
         ..addAll(
           items.map((item) => Recipe.fromJson(item as Map<String, dynamic>)),
         );
+      _userRecipes
+        ..clear()
+        ..addAll(await _storageService.loadRecipes());
       // Show the recipes now, before the nutrition request finishes.
       notifyListeners();
     } catch (_) {
@@ -62,6 +88,37 @@ class RecipeProvider extends ChangeNotifier {
 
     await _fetchNutrition();
     _isLoading = false;
+    notifyListeners();
+  }
+
+  /// Adds a user recipe, saves it, and fetches nutrition for any new
+  /// ingredients.
+  Future<void> addRecipe(Recipe recipe) async {
+    _userRecipes.add(recipe);
+    await _saveAndFetch();
+  }
+
+  /// Replaces the user recipe that has the same id as [recipe].
+  /// Built-in recipes can't be changed, so they are ignored.
+  Future<void> updateRecipe(Recipe recipe) async {
+    final index = _userRecipes.indexWhere((item) => item.id == recipe.id);
+    if (index == -1) return;
+    _userRecipes[index] = recipe;
+    await _saveAndFetch();
+  }
+
+  /// Removes the user recipe with [id]. Built-in recipes are never removed.
+  Future<void> deleteRecipe(String id) async {
+    _userRecipes.removeWhere((item) => item.id == id);
+    notifyListeners();
+    await _storageService.saveRecipes(_userRecipes);
+  }
+
+  Future<void> _saveAndFetch() async {
+    _errorMessage = null;
+    notifyListeners();
+    await _storageService.saveRecipes(_userRecipes);
+    await _fetchNutrition();
     notifyListeners();
   }
 
@@ -81,7 +138,7 @@ class RecipeProvider extends ChangeNotifier {
   /// call to getFoodsByIds. Sets [errorMessage] if the request fails.
   Future<void> _fetchNutrition() async {
     final missingIds = <int>{
-      for (final recipe in _recipes)
+      for (final recipe in recipes)
         for (final ingredient in recipe.ingredients)
           if (!_foods.containsKey(ingredient.fdcId)) ingredient.fdcId,
     };
@@ -101,7 +158,7 @@ class RecipeProvider extends ChangeNotifier {
   }
 
   List<Recipe> recipesByCategory(String category) {
-    return _recipes.where((recipe) => recipe.category == category).toList();
+    return recipes.where((recipe) => recipe.category == category).toList();
   }
 
   /// True when USDA data exists for every ingredient in [recipe].
