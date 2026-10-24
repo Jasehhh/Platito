@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../models/food.dart';
 import '../services/usda_service.dart';
+import '../widgets/cost_badge.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/macro_bar.dart';
 
 /// The five things the Lookup screen can show. Exactly one is active.
 enum _LookupStatus { idle, loading, results, empty, error }
@@ -200,7 +202,8 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
   }
 }
 
-/// One search result: food name, kcal per 100 g, and a protein badge.
+/// One search result: food name, kcal per 100 g, a protein badge, and a
+/// bar showing how much of the calories come from protein.
 class _FoodResultCard extends StatelessWidget {
   const _FoodResultCard({required this.food});
 
@@ -209,6 +212,11 @@ class _FoodResultCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
+    // Protein has 4 kcal per gram.
+    final proteinShare = food.calories == 0
+        ? 0.0
+        : food.protein * 4 / food.calories;
+
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
@@ -216,71 +224,47 @@ class _FoodResultCard extends StatelessWidget {
         border: Border.all(color: colors.outlineVariant),
         borderRadius: BorderRadius.circular(18),
       ),
-      child: Row(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  food.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: const TextStyle(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.bold,
-                  ),
+          Row(
+            children: [
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      food.name,
+                      maxLines: 2,
+                      overflow: TextOverflow.ellipsis,
+                      style: const TextStyle(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      '${food.calories.round()} kcal per 100 g',
+                      style: TextStyle(
+                        fontSize: 12,
+                        color: colors.onSurfaceVariant,
+                      ),
+                    ),
+                  ],
                 ),
-                const SizedBox(height: 4),
-                Text(
-                  '${food.calories.round()} kcal per 100 g',
-                  style: TextStyle(
-                    fontSize: 12,
-                    color: colors.onSurfaceVariant,
-                  ),
-                ),
-              ],
-            ),
+              ),
+              const SizedBox(width: 12),
+              CostBadge(
+                icon: Icons.fitness_center,
+                label: '${food.protein.toStringAsFixed(1)} g protein',
+              ),
+            ],
           ),
-          const SizedBox(width: 12),
-          _ProteinBadge(grams: food.protein),
-        ],
-      ),
-    );
-  }
-}
-
-/// Pill showing grams of protein per 100 g (DESIGN.md ValueBadge style).
-class _ProteinBadge extends StatelessWidget {
-  const _ProteinBadge({required this.grams});
-
-  final double grams;
-
-  @override
-  Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: colors.primaryContainer,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            Icons.fitness_center,
-            size: 12,
-            color: colors.onPrimaryContainer,
-          ),
-          const SizedBox(width: 4),
-          Text(
-            '${grams.toStringAsFixed(1)} g protein',
-            style: TextStyle(
-              fontSize: 11.5,
-              fontWeight: FontWeight.bold,
-              color: colors.onPrimaryContainer,
-            ),
+          const SizedBox(height: 10),
+          MacroBar(
+            label: 'Protein',
+            value: '${(proteinShare * 100).clamp(0, 100).round()}% kcal',
+            fraction: proteinShare,
           ),
         ],
       ),
