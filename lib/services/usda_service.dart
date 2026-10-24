@@ -30,7 +30,9 @@ class UsdaService {
   static const _host = 'api.nal.usda.gov';
   static const _searchPath = '/fdc/v1/foods/search';
   static const _foodsPath = '/fdc/v1/foods';
-  static const _timeout = Duration(seconds: 10);
+
+  /// USDA sometimes takes over 10 s on the first request of a session.
+  static const _timeout = Duration(seconds: 20);
 
   /// USDA accepts at most 20 fdcIds in one /fdc/v1/foods request.
   static const _maxIdsPerRequest = 20;
