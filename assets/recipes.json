@@ -183,5 +183,257 @@
       "Add the okra and cook for 5 minutes.",
       "Pour in the beaten eggs and stir until set. Season with salt."
     ]
+  },
+  {
+    "id": "tortang-talong",
+    "name": "Tortang Talong",
+    "category": "Cutting",
+    "servings": 2,
+    "emoji": "🍆",
+    "image": "assets/images/recipes/tortang-talong.jpg",
+    "imageCredit": "Photo: whologwhy, CC BY 2.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Eggplant", "fdcId": 169228, "grams": 300, "price": 30 },
+      { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
+      { "name": "Onion", "fdcId": 170000, "grams": 30, "price": 5 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Grill or boil the eggplants until soft, then peel off the skin.",
+      "Flatten each eggplant with a fork, keeping the stem on.",
+      "Beat the eggs with minced garlic and chopped onion.",
+      "Dip each eggplant in the egg and fry 2 to 3 minutes per side."
+    ]
+  },
+  {
+    "id": "sinigang-na-bangus",
+    "name": "Sinigang na Bangus",
+    "category": "Cutting",
+    "servings": 4,
+    "emoji": "🐟",
+    "image": "assets/images/recipes/sinigang-na-bangus.jpg",
+    "imageCredit": "Photo: Copperhead02, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Milkfish (bangus), sliced", "fdcId": 173675, "grams": 500, "price": 110 },
+      { "name": "Radish (labanos)", "fdcId": 168451, "grams": 150, "price": 10 },
+      { "name": "Sitaw (yardlong beans)", "fdcId": 169222, "grams": 100, "price": 10 },
+      { "name": "Kangkong", "fdcId": 169301, "grams": 100, "price": 10 },
+      { "name": "Tomato", "fdcId": 170457, "grams": 100, "price": 10 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Tamarind (sampalok)", "fdcId": 167763, "grams": 50, "price": 10 },
+      { "name": "Fish sauce (patis)", "fdcId": 174531, "grams": 15, "price": 2 }
+    ],
+    "steps": [
+      "Boil 6 cups of water with the tomato, onion, and tamarind for 10 minutes.",
+      "Mash the tamarind, strain the soup, and bring it back to a boil.",
+      "Add the radish and sitaw and cook for 5 minutes.",
+      "Add the bangus and simmer for 8 minutes.",
+      "Add the kangkong, season with fish sauce, and serve."
+    ]
+  },
+  {
+    "id": "pinakbet",
+    "name": "Pinakbet",
+    "category": "Budget Meals",
+    "servings": 4,
+    "emoji": "🥘",
+    "image": "assets/images/recipes/pinakbet.jpg",
+    "imageCredit": "Photo: Shubert Ciencia, CC BY 2.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Squash (kalabasa)", "fdcId": 170489, "grams": 250, "price": 20 },
+      { "name": "Eggplant", "fdcId": 169228, "grams": 150, "price": 15 },
+      { "name": "Ampalaya (bitter gourd)", "fdcId": 168393, "grams": 150, "price": 20 },
+      { "name": "Okra", "fdcId": 169260, "grams": 100, "price": 10 },
+      { "name": "Sitaw (yardlong beans)", "fdcId": 169222, "grams": 100, "price": 10 },
+      { "name": "Ground pork", "fdcId": 167902, "grams": 150, "price": 50 },
+      { "name": "Tomato", "fdcId": 170457, "grams": 100, "price": 10 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 10, "price": 2 },
+      { "name": "Fish sauce (patis)", "fdcId": 174531, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Saute garlic, onion, and tomato in oil, then brown the ground pork.",
+      "Add the squash and half a cup of water. Cover and cook for 5 minutes.",
+      "Add the ampalaya, eggplant, okra, and sitaw.",
+      "Cook for 7 minutes until tender, season with fish sauce, and serve."
+    ]
+  },
+  {
+    "id": "ginisang-giniling",
+    "name": "Ginisang Giniling",
+    "category": "Budget Meals",
+    "servings": 4,
+    "emoji": "🍛",
+    "image": "assets/images/recipes/ginisang-giniling.jpg",
+    "imageCredit": "Photo: Ralff Nestor Nacor, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Ground pork", "fdcId": 167902, "grams": 400, "price": 130 },
+      { "name": "Potato", "fdcId": 170026, "grams": 200, "price": 20 },
+      { "name": "Carrot", "fdcId": 170393, "grams": 100, "price": 8 },
+      { "name": "Green peas", "fdcId": 170419, "grams": 80, "price": 15 },
+      { "name": "Tomato sauce", "fdcId": 170054, "grams": 115, "price": 18 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 15, "price": 3 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Dice the potato and carrot into small cubes.",
+      "Saute garlic and onion in oil, then brown the ground pork.",
+      "Add the tomato sauce, soy sauce, potato, carrot, and half a cup of water.",
+      "Simmer for 15 minutes, add the peas, and cook for 3 more minutes."
+    ]
+  },
+  {
+    "id": "tapsilog",
+    "name": "Tapsilog",
+    "category": "Bulking",
+    "servings": 2,
+    "emoji": "🥩",
+    "image": "assets/images/recipes/tapsilog.jpg",
+    "imageCredit": "Photo: Maffeth.opiana, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Beef top round, thinly sliced", "fdcId": 171758, "grams": 250, "price": 125 },
+      { "name": "White rice, uncooked", "fdcId": 168877, "grams": 200, "price": 11 },
+      { "name": "Egg", "fdcId": 171287, "grams": 100, "price": 18 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 20, "price": 3 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 30, "price": 3 },
+      { "name": "Vinegar", "fdcId": 172237, "grams": 15, "price": 1 },
+      { "name": "Black pepper", "fdcId": 170931, "grams": 2, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 20, "price": 4 }
+    ],
+    "steps": [
+      "Marinate the beef in soy sauce, vinegar, half the garlic, and pepper for 30 minutes.",
+      "Cook the rice, then fry it with the rest of the garlic to make sinangag.",
+      "Pan-fry the beef until browned and the marinade is gone.",
+      "Fry the eggs sunny side up and serve with the beef and garlic rice."
+    ]
+  },
+  {
+    "id": "chicken-afritada",
+    "name": "Chicken Afritada",
+    "category": "Bulking",
+    "servings": 4,
+    "emoji": "🍅",
+    "image": "assets/images/recipes/chicken-afritada.jpg",
+    "imageCredit": "Photo: Ralff Nestor Nacor, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Chicken thigh, meat only", "fdcId": 173627, "grams": 500, "price": 125 },
+      { "name": "Potato", "fdcId": 170026, "grams": 250, "price": 25 },
+      { "name": "Carrot", "fdcId": 170393, "grams": 150, "price": 12 },
+      { "name": "Red bell pepper", "fdcId": 170108, "grams": 100, "price": 15 },
+      { "name": "Tomato sauce", "fdcId": 170054, "grams": 230, "price": 30 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 15, "price": 3 },
+      { "name": "Fish sauce (patis)", "fdcId": 174531, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 },
+      { "name": "White rice, uncooked", "fdcId": 168877, "grams": 300, "price": 17 }
+    ],
+    "steps": [
+      "Saute garlic and onion in oil, then brown the chicken.",
+      "Add the tomato sauce, fish sauce, and 1 cup of water. Simmer for 15 minutes.",
+      "Add the potato and carrot and cook for 10 minutes.",
+      "Add the bell pepper, cook for 3 minutes, and serve with rice."
+    ]
+  },
+  {
+    "id": "chicken-sopas",
+    "name": "Chicken Sopas",
+    "category": "Bulking",
+    "servings": 4,
+    "emoji": "🥣",
+    "image": "assets/images/recipes/chicken-sopas.jpg",
+    "imageCredit": "Photo: Darwgon0801, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Elbow macaroni, dry", "fdcId": 169736, "grams": 250, "price": 30 },
+      { "name": "Chicken breast, skinless", "fdcId": 171077, "grams": 300, "price": 87 },
+      { "name": "Evaporated milk", "fdcId": 172194, "grams": 370, "price": 45 },
+      { "name": "Carrot", "fdcId": 170393, "grams": 100, "price": 8 },
+      { "name": "Cabbage", "fdcId": 169975, "grams": 150, "price": 10 },
+      { "name": "Onion", "fdcId": 170000, "grams": 50, "price": 7 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 15, "price": 3 },
+      { "name": "Fish sauce (patis)", "fdcId": 174531, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Boil the chicken in 6 cups of water for 15 minutes, then shred it and keep the broth.",
+      "Saute garlic and onion in oil, then add the shredded chicken and carrot.",
+      "Pour in the broth, bring to a boil, and add the macaroni. Cook for 10 minutes.",
+      "Stir in the cabbage and evaporated milk, season with fish sauce, and serve."
+    ]
+  },
+  {
+    "id": "bistek-tagalog",
+    "name": "Bistek Tagalog",
+    "category": "High Protein",
+    "servings": 3,
+    "emoji": "🧅",
+    "image": "assets/images/recipes/bistek-tagalog.jpg",
+    "imageCredit": "Photo: Aerous, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Beef top round, thinly sliced", "fdcId": 171758, "grams": 400, "price": 200 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 60, "price": 6 },
+      { "name": "Calamansi juice", "fdcId": 168156, "grams": 40, "price": 10 },
+      { "name": "Onion", "fdcId": 170000, "grams": 150, "price": 20 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 15, "price": 3 },
+      { "name": "Black pepper", "fdcId": 170931, "grams": 2, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Marinate the beef in soy sauce, calamansi juice, garlic, and pepper for 30 minutes.",
+      "Fry the onion rings in oil until soft, then set them aside.",
+      "Sear the beef in the same pan, then add the marinade and half a cup of water.",
+      "Simmer for 15 minutes and top with the onion rings."
+    ]
+  },
+  {
+    "id": "inihaw-na-manok",
+    "name": "Inihaw na Manok",
+    "category": "High Protein",
+    "servings": 3,
+    "emoji": "🍢",
+    "image": "assets/images/recipes/inihaw-na-manok.jpg",
+    "imageCredit": "Photo: Obsidian Soul, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Chicken breast, skinless", "fdcId": 171077, "grams": 500, "price": 145 },
+      { "name": "Calamansi juice", "fdcId": 168156, "grams": 30, "price": 8 },
+      { "name": "Vinegar", "fdcId": 172237, "grams": 30, "price": 2 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 20, "price": 3 },
+      { "name": "Ginger", "fdcId": 169231, "grams": 15, "price": 3 },
+      { "name": "Soy sauce", "fdcId": 174277, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 15, "price": 3 }
+    ],
+    "steps": [
+      "Mix calamansi juice, vinegar, soy sauce, crushed garlic, and grated ginger.",
+      "Marinate the chicken for at least 1 hour.",
+      "Grill or pan-grill the chicken 6 to 8 minutes per side, brushing it with oil.",
+      "Slice and serve with the leftover marinade boiled as a sauce."
+    ]
+  },
+  {
+    "id": "lugaw-with-egg",
+    "name": "Lugaw with Egg",
+    "category": "Budget Meals",
+    "servings": 3,
+    "emoji": "🥄",
+    "image": "assets/images/recipes/lugaw-with-egg.jpg",
+    "imageCredit": "Photo: Ralff Nestor Nacor, CC BY-SA 4.0, via Wikimedia Commons",
+    "ingredients": [
+      { "name": "Glutinous rice (malagkit), uncooked", "fdcId": 168883, "grams": 150, "price": 14 },
+      { "name": "Egg", "fdcId": 171287, "grams": 150, "price": 27 },
+      { "name": "Ginger", "fdcId": 169231, "grams": 20, "price": 4 },
+      { "name": "Garlic", "fdcId": 169230, "grams": 15, "price": 3 },
+      { "name": "Spring onion", "fdcId": 170005, "grams": 20, "price": 5 },
+      { "name": "Fish sauce (patis)", "fdcId": 174531, "grams": 15, "price": 2 },
+      { "name": "Cooking oil", "fdcId": 171411, "grams": 10, "price": 2 }
+    ],
+    "steps": [
+      "Saute ginger and half the garlic in oil, then add the rinsed rice.",
+      "Pour in 7 cups of water and simmer for 30 minutes, stirring often.",
+      "Hard-boil the eggs. Fry the rest of the garlic until golden.",
+      "Season with fish sauce and top each bowl with an egg, fried garlic, and spring onion."
+    ]
   }
 ]
