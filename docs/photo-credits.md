@@ -16,3 +16,13 @@ freely licensed photo of the exact recipe was available.
 | Chicken Tinola | [Chicken tinola with kalamunggay (moringa leaves) and chayote (Philippines).jpg](https://commons.wikimedia.org/wiki/File:Chicken_tinola_with_kalamunggay_(moringa_leaves)_and_chayote_(Philippines).jpg) | Obsidian Soul | [CC0](http://creativecommons.org/publicdomain/zero/1.0/deed.en) |
 | Arroz Caldo | [Arroz Caldo Matana Cafe at the IL Corso Food Yard (2026-03-15).jpg](https://commons.wikimedia.org/wiki/File:Arroz_Caldo_Matana_Cafe_at_the_IL_Corso_Food_Yard_(2026-03-15).jpg) | Wide Awake! | [CC BY 4.0](https://creativecommons.org/licenses/by/4.0) |
 | Ginisang Okra with Egg | [Tortang-Okra-Wide.jpg](https://commons.wikimedia.org/wiki/File:Tortang-Okra-Wide.jpg) | Raymund Macaalay | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Tortang Talong | [EGGPLANT TORTA.jpg](https://commons.wikimedia.org/wiki/File:EGGPLANT_TORTA.jpg) | whologwhy | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| Sinigang na Bangus | [Fish sinigang.jpg](https://commons.wikimedia.org/wiki/File:Fish_sinigang.jpg) | Copperhead02 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Pinakbet | [Pinakbet.jpg](https://commons.wikimedia.org/wiki/File:Pinakbet.jpg) | Shubert Ciencia | [CC BY 2.0](https://creativecommons.org/licenses/by/2.0) |
+| Ginisang Giniling | [Pork Giniling, Feb 2024.jpg](https://commons.wikimedia.org/wiki/File:Pork_Giniling,_Feb_2024.jpg) | Ralff Nestor Nacor | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Tapsilog | [Beef Tapa with Egg.jpg](https://commons.wikimedia.org/wiki/File:Beef_Tapa_with_Egg.jpg) | Maffeth.opiana | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Chicken Afritada | [Chicken Afritada, Mar 2024.jpg](https://commons.wikimedia.org/wiki/File:Chicken_Afritada,_Mar_2024.jpg) | Ralff Nestor Nacor | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Chicken Sopas | [Sopas, Filipino noodle soup dish.jpg](https://commons.wikimedia.org/wiki/File:Sopas,_Filipino_noodle_soup_dish.jpg) | Darwgon0801 | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Bistek Tagalog | [Bistek Tagalog.jpg](https://commons.wikimedia.org/wiki/File:Bistek_Tagalog.jpg) | Aerous | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Inihaw na Manok | [Chicken inasal (Philippines).jpg](https://commons.wikimedia.org/wiki/File:Chicken_inasal_(Philippines).jpg) | Obsidian Soul | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
+| Lugaw with Egg | [Lugaw with Egg, Feb 2024.jpg](https://commons.wikimedia.org/wiki/File:Lugaw_with_Egg,_Feb_2024.jpg) | Ralff Nestor Nacor | [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0) |
