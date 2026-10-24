@@ -11,6 +11,7 @@ import '../widgets/circle_icon_button.dart';
 import '../widgets/cost_badge.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/macro_bar.dart';
+import '../widgets/recipe_image.dart';
 
 /// One recipe with its cost, USDA nutrition per serving, ingredients, and
 /// steps. Opened with
@@ -89,6 +90,18 @@ class RecipeDetailScreen extends StatelessWidget {
                       const _SectionTitle('Steps'),
                       for (var i = 0; i < recipe.steps.length; i++)
                         _StepRow(number: i + 1, text: recipe.steps[i]),
+                      // CC BY photos must credit their author.
+                      if (recipe.imageCredit != null)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8),
+                          child: Text(
+                            recipe.imageCredit!,
+                            style: const TextStyle(
+                              fontSize: 11,
+                              color: AppColors.textMuted,
+                            ),
+                          ),
+                        ),
                     ],
                   ),
                 ),
@@ -111,21 +124,12 @@ class RecipeDetailScreen extends StatelessWidget {
     );
   }
 
-  /// DESIGN.md 6.4: tinted gradient with the recipe emoji in place of a
-  /// food photo.
+  /// DESIGN.md 6.4: the food photo, or the emoji on a tinted gradient for
+  /// recipes without one.
   Widget _buildImageHeader(Recipe recipe) {
-    final tint = AppColors.tintFor(recipe.id);
-    return Container(
+    return SizedBox(
       height: _headerHeight,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [tint, Color.lerp(tint, AppColors.tintClay, 0.6)!],
-        ),
-      ),
-      child: Text(recipe.emoji, style: const TextStyle(fontSize: 96)),
+      child: RecipeImage(recipe: recipe, emojiSize: 96),
     );
   }
 
