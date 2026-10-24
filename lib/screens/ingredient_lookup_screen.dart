@@ -81,7 +81,11 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
     setState(() => _status = _LookupStatus.loading);
 
     try {
-      final foods = await _service.searchFoods(trimmed);
+      // Some USDA entries have no protein or calorie values at all. They
+      // would show as "0.0 g protein, 0 kcal", so they are left out.
+      final foods = (await _service.searchFoods(
+        trimmed,
+      )).where((food) => food.protein > 0 || food.calories > 0).toList();
       if (!mounted || searchId != _searchId) return;
       setState(() {
         _foods = foods;
