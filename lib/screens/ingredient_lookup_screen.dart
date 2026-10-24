@@ -151,7 +151,7 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
             child: IconButton.filled(
               tooltip: 'Search',
               onPressed: () => _search(_controller.text),
-              icon: const Icon(Icons.arrow_forward),
+              icon: const Icon(Icons.arrow_forward, color: Colors.white),
             ),
           ),
           // The white bar already draws the box, so the field has none.
