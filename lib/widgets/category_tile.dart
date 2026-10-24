@@ -34,7 +34,7 @@ class CategoryTile extends StatelessWidget {
         child: SizedBox(
           height: 92,
           child: Padding(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.fromLTRB(12, 10, 12, 10),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
