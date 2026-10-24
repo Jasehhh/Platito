@@ -4,7 +4,7 @@ import 'package:flutter/services.dart';
 import '../theme/app_colors.dart';
 
 /// Green gradient header for the Home screen (DESIGN.md section 6.1):
-/// title row, a Filipino greeting, and a search bar that overlaps the
+/// app name, a Filipino greeting, and a search bar that overlaps the
 /// header's bottom edge by half its height.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, this.onSearchTap, this.onFilterTap});
@@ -57,7 +57,14 @@ class HomeHeader extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const _TitleRow(),
+                  const Text(
+                    'Platito',
+                    style: TextStyle(
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                  ),
                   const SizedBox(height: 20),
                   Text(
                     greetingFor(DateTime.now()),
@@ -91,45 +98,6 @@ class HomeHeader extends StatelessWidget {
           ),
         ],
       ),
-    );
-  }
-}
-
-/// "Platito" on the left, a glass bell button on the right.
-class _TitleRow extends StatelessWidget {
-  const _TitleRow();
-
-  @override
-  Widget build(BuildContext context) {
-    final glass = Colors.white.withValues(alpha: 0.18);
-    return Row(
-      children: [
-        const Text(
-          'Platito',
-          style: TextStyle(
-            fontSize: 22,
-            fontWeight: FontWeight.bold,
-            color: Colors.white,
-          ),
-        ),
-        const Spacer(),
-        // Glass circle button (40 x 40). Notifications are not built yet.
-        Material(
-          color: glass,
-          shape: const CircleBorder(),
-          child: IconButton(
-            tooltip: 'Notifications',
-            onPressed: () {},
-            constraints: const BoxConstraints.tightFor(width: 40, height: 40),
-            padding: EdgeInsets.zero,
-            icon: const Icon(
-              Icons.notifications_none,
-              color: Colors.white,
-              size: 22,
-            ),
-          ),
-        ),
-      ],
     );
   }
 }
