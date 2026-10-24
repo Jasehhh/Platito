@@ -93,10 +93,10 @@ class RecipeProvider extends ChangeNotifier {
         _foods[food.fdcId] = food;
       }
     } on UsdaException catch (e) {
-      _errorMessage = 'Nutrition unavailable. ${e.message}';
+      _errorMessage = e.message;
     } catch (_) {
       // For example, USDA sent JSON in a shape the parser did not expect.
-      _errorMessage = 'Nutrition unavailable. Please try again.';
+      _errorMessage = 'Something went wrong. Please try again.';
     }
   }
 
