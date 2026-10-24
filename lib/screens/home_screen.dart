@@ -3,8 +3,8 @@ import 'package:provider/provider.dart';
 
 import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
-import '../theme/app_colors.dart';
 import '../utils/constants.dart';
+import '../utils/formatters.dart';
 import '../widgets/category_tile.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/home_header.dart';
@@ -15,14 +15,6 @@ class HomeScreen extends StatelessWidget {
 
   /// How many recipes "Popular this week" shows.
   static const _popularCount = 3;
-
-  /// Icon and tint for each category tile, in recipeCategories order.
-  static const _categoryIcons = {
-    'Budget Meals': (Icons.savings_outlined, AppColors.tintEgg),
-    'High Protein': (Icons.fitness_center, AppColors.tintLeaf),
-    'Bulking': (Icons.trending_up, AppColors.tintClay),
-    'Cutting': (Icons.eco_outlined, AppColors.tintSea),
-  };
 
   /// Opens Recipe List. A null [category] shows every recipe.
   void _openList(BuildContext context, String? category) {
@@ -69,20 +61,46 @@ class HomeScreen extends StatelessWidget {
       crossAxisCount: 2,
       mainAxisSpacing: 12,
       crossAxisSpacing: 12,
-      mainAxisExtent: 92,
+      childAspectRatio: 1.25,
       shrinkWrap: true,
       padding: EdgeInsets.zero,
       physics: const NeverScrollableScrollPhysics(),
       children: [
         for (final category in recipeCategories)
-          CategoryTile(
-            title: category,
-            caption: '${provider.recipesByCategory(category).length} recipes',
-            icon: _categoryIcons[category]!.$1,
-            tint: _categoryIcons[category]!.$2,
-            onTap: () => _openList(context, category),
-          ),
+          _buildCategoryTile(context, provider, category),
       ],
+    );
+  }
+
+  /// The tile shows the category's best-value dish that has a photo, and
+  /// the cheapest serving in the category.
+  Widget _buildCategoryTile(
+    BuildContext context,
+    RecipeProvider provider,
+    String category,
+  ) {
+    final recipes = provider.sortRecipes(
+      provider.recipesByCategory(category),
+      RecipeSort.proteinPerPeso,
+    );
+    final withPhoto = recipes.where((recipe) => recipe.image != null);
+    final cover = withPhoto.isNotEmpty
+        ? withPhoto.first
+        : (recipes.isNotEmpty ? recipes.first : null);
+
+    String caption = 'No recipes yet';
+    if (recipes.isNotEmpty) {
+      final cheapest = recipes
+          .map(provider.costPerServingFor)
+          .reduce((a, b) => a < b ? a : b);
+      caption = 'From ${formatPesos(cheapest.roundToDouble())} a serving';
+    }
+
+    return CategoryTile(
+      title: category,
+      caption: caption,
+      coverRecipe: cover,
+      onTap: () => _openList(context, category),
     );
   }
 
