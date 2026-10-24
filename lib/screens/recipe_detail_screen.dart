@@ -70,7 +70,6 @@ class RecipeDetailScreen extends StatelessWidget {
                           ),
                           if (proteinPerPeso != null)
                             CostBadge(
-                              icon: Icons.bolt,
                               label: formatProteinPerPeso(proteinPerPeso),
                             ),
                         ],

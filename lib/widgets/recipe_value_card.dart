@@ -37,10 +37,7 @@ class RecipeValueCard extends StatelessWidget {
       ),
       badge: proteinPerPeso == null
           ? null
-          : CostBadge(
-              icon: Icons.bolt,
-              label: formatProteinPerPeso(proteinPerPeso),
-            ),
+          : CostBadge(label: formatProteinPerPeso(proteinPerPeso)),
       trailing: trailing ?? FavoriteButton(recipe: recipe),
       onTap: onTap,
     );
