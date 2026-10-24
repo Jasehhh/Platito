@@ -100,7 +100,7 @@ class _IngredientSearchSheetState extends State<IngredientSearchSheet> {
                   child: IconButton.filled(
                     tooltip: 'Search',
                     onPressed: _search,
-                    icon: const Icon(Icons.arrow_forward),
+                    icon: const Icon(Icons.arrow_forward, color: Colors.white),
                   ),
                 ),
               ),

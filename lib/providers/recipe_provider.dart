@@ -184,6 +184,9 @@ class RecipeProvider extends ChangeNotifier {
     return recipes.where((recipe) => recipe.category == category).toList();
   }
 
+  /// The USDA food for [fdcId], or null if it has not been fetched.
+  Food? foodFor(int fdcId) => _foods[fdcId];
+
   /// True when USDA data exists for every ingredient in [recipe].
   bool hasNutrition(Recipe recipe) {
     return recipe.ingredients.every(

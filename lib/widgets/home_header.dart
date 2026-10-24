@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 
 import '../theme/app_colors.dart';
+import 'gradient_header.dart';
 
-/// Green gradient header for the Home screen (DESIGN.md section 6.1):
-/// app name, a Filipino greeting, and a search bar that overlaps the
-/// header's bottom edge by half its height.
+/// Home's version of [GradientHeader] (DESIGN.md section 6.1): app name,
+/// a Filipino greeting, and a search bar on the header's bottom edge.
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, this.onSearchTap, this.onFilterTap});
 
@@ -13,8 +12,6 @@ class HomeHeader extends StatelessWidget {
   /// opens a search screen, not a text field.
   final VoidCallback? onSearchTap;
   final VoidCallback? onFilterTap;
-
-  static const _searchBarHeight = 52.0;
 
   /// "Good morning / afternoon / evening" in Filipino, based on the hour.
   static String greetingFor(DateTime time) {
@@ -25,75 +22,34 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final topInset = MediaQuery.paddingOf(context).top;
-
-    // Light status bar icons on the dark green header.
-    return AnnotatedRegion<SystemUiOverlayStyle>(
-      value: SystemUiOverlayStyle.light,
-      child: Stack(
+    return GradientHeader(
+      overlap: _SearchBar(onTap: onSearchTap, onFilterTap: onFilterTap),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // The gradient stops half a search bar above the bottom, so the
-          // search bar below sits half on the header and half off it.
-          Padding(
-            padding: const EdgeInsets.only(bottom: _searchBarHeight / 2),
-            child: Container(
-              width: double.infinity,
-              padding: EdgeInsets.fromLTRB(
-                18,
-                topInset + 16,
-                18,
-                _searchBarHeight / 2 + 22,
-              ),
-              decoration: const BoxDecoration(
-                gradient: LinearGradient(
-                  begin: Alignment.topLeft,
-                  end: Alignment.bottomRight,
-                  colors: AppColors.headerGradient,
-                ),
-                borderRadius: BorderRadius.vertical(
-                  bottom: Radius.circular(28),
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const Text(
-                    'Platito',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  Text(
-                    greetingFor(DateTime.now()),
-                    style: TextStyle(
-                      fontSize: 13,
-                      color: Colors.white.withValues(alpha: 0.85),
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  const Text(
-                    'What are we eating for gains today?',
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                ],
-              ),
+          const Text(
+            'Platito',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
-          Positioned(
-            left: 18,
-            right: 18,
-            bottom: 0,
-            child: _SearchBar(
-              height: _searchBarHeight,
-              onTap: onSearchTap,
-              onFilterTap: onFilterTap,
+          const SizedBox(height: 20),
+          Text(
+            greetingFor(DateTime.now()),
+            style: TextStyle(
+              fontSize: 13,
+              color: Colors.white.withValues(alpha: 0.85),
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'What are we eating for gains today?',
+            style: TextStyle(
+              fontSize: 22,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
             ),
           ),
         ],
@@ -102,29 +58,16 @@ class HomeHeader extends StatelessWidget {
   }
 }
 
-/// White search bar with a soft green shadow and a filter button.
+/// White search bar button with a filter button on the right.
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({required this.height, this.onTap, this.onFilterTap});
+  const _SearchBar({this.onTap, this.onFilterTap});
 
-  final double height;
   final VoidCallback? onTap;
   final VoidCallback? onFilterTap;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: height,
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x290F4D36), // rgba(15, 77, 54, 0.16)
-            offset: Offset(0, 8),
-            blurRadius: 20,
-          ),
-        ],
-      ),
+    return HeaderBar(
       child: Material(
         type: MaterialType.transparency,
         child: InkWell(
