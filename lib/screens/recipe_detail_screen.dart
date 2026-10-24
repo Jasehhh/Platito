@@ -25,8 +25,10 @@ class RecipeDetailScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final recipe = ModalRoute.of(context)!.settings.arguments as Recipe;
+    final argument = ModalRoute.of(context)!.settings.arguments as Recipe;
     final provider = context.watch<RecipeProvider>();
+    // Use the latest version, so an edited user recipe updates here too.
+    final recipe = provider.recipeById(argument.id) ?? argument;
     final proteinPerPeso = provider.proteinPerPesoFor(recipe);
 
     return AnnotatedRegion<SystemUiOverlayStyle>(
