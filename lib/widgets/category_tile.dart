@@ -42,8 +42,8 @@ class CategoryTile extends StatelessWidget {
                   gradient: LinearGradient(
                     begin: Alignment.topCenter,
                     end: Alignment.bottomCenter,
-                    stops: [0.35, 1],
-                    colors: [Color(0x00000000), Color(0xCC0F2A20)],
+                    stops: [0.3, 1],
+                    colors: [Color(0x00000000), Color(0xE60B241B)],
                   ),
                 ),
               ),
@@ -62,6 +62,7 @@ class CategoryTile extends StatelessWidget {
                         fontSize: 16,
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
+                        shadows: [Shadow(blurRadius: 6)],
                       ),
                     ),
                     Text(
