@@ -8,12 +8,13 @@ import '../utils/constants.dart';
 import '../utils/formatters.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/favorite_button.dart';
+import '../widgets/gradient_header.dart';
 import '../widgets/recipe_image.dart';
 import '../widgets/recipe_value_card.dart';
 
 /// The user's favorites as a row of photo cards, then the recipes they
-/// made with edit and delete buttons, and a "New recipe" button above
-/// the dock.
+/// made with edit and delete buttons. The bar on the header opens the
+/// New Recipe form.
 class MyRecipesScreen extends StatelessWidget {
   const MyRecipesScreen({super.key});
 
@@ -56,107 +57,130 @@ class MyRecipesScreen extends StatelessWidget {
     final myRecipes = provider.userRecipes;
 
     return Scaffold(
-      body: SafeArea(
-        child: ListView(
-          // Room at the bottom so the last card clears the New recipe button.
-          padding: const EdgeInsets.fromLTRB(18, 16, 18, 90),
-          children: [
-            const _LargeTitle(),
-            _SectionHeader(title: 'Favorites', count: favorites.length),
-            if (favorites.isEmpty)
-              const _FavoritesHint()
-            else
-              SizedBox(
-                height: 200,
-                child: ListView.separated(
-                  scrollDirection: Axis.horizontal,
-                  // Let the row run to the screen edge while the first card
-                  // still lines up with the page padding.
-                  clipBehavior: Clip.none,
-                  itemCount: favorites.length,
-                  separatorBuilder: (_, _) => const SizedBox(width: 12),
-                  itemBuilder: (context, index) => _FavoriteCard(
-                    recipe: favorites[index],
-                    onTap: () => _openDetail(context, favorites[index]),
-                  ),
-                ),
-              ),
-            _SectionHeader(title: 'Made by you', count: myRecipes.length),
-            if (myRecipes.isEmpty)
-              EmptyState(
-                icon: Icons.menu_book_outlined,
-                title: 'No recipes yet',
-                message:
-                    'Add your own budget meal and see its protein per peso.',
-                actionLabel: 'Create a recipe',
-                onAction: () => _openForm(context),
-              ),
-            for (final recipe in myRecipes) ...[
-              RecipeValueCard(
-                recipe: recipe,
-                onTap: () => _openDetail(context, recipe),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _SmallActionButton(
-                      icon: Icons.edit_outlined,
-                      tooltip: 'Edit',
-                      background: AppColors.background,
-                      color: AppColors.textMuted,
-                      onPressed: () => _openForm(context, recipe),
-                    ),
-                    const SizedBox(width: 6),
-                    _SmallActionButton(
-                      icon: Icons.delete_outline,
-                      tooltip: 'Delete',
-                      background: AppColors.errorLight,
-                      color: AppColors.error,
-                      onPressed: () => _confirmDelete(context, recipe),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 10),
-            ],
-          ],
+      body: ListView(
+        // Room at the bottom so the last card clears the floating dock.
+        padding: EdgeInsets.only(
+          bottom: MediaQuery.paddingOf(context).bottom + 16,
         ),
-      ),
-      // MainShell's bottom padding includes the floating dock, so lifting
-      // the button by it places the button just above the dock.
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(bottom: MediaQuery.paddingOf(context).bottom),
-        child: FloatingActionButton.extended(
-          onPressed: () => _openForm(context),
-          icon: const Icon(Icons.add),
-          label: const Text(
-            'New recipe',
-            style: TextStyle(fontWeight: FontWeight.bold),
+        children: [
+          GradientHeader(
+            overlap: _AddRecipeBar(onTap: () => _openForm(context)),
+            child: const GradientHeaderTitle(
+              title: 'My Recipes',
+              subtitle: 'Meals you saved and meals you made',
+            ),
           ),
-        ),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 18),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                _SectionHeader(title: 'Favorites', count: favorites.length),
+                if (favorites.isEmpty)
+                  const _FavoritesHint()
+                else
+                  SizedBox(
+                    height: 200,
+                    child: ListView.separated(
+                      scrollDirection: Axis.horizontal,
+                      // Let the row run to the screen edge while the first card
+                      // still lines up with the page padding.
+                      clipBehavior: Clip.none,
+                      itemCount: favorites.length,
+                      separatorBuilder: (_, _) => const SizedBox(width: 12),
+                      itemBuilder: (context, index) => _FavoriteCard(
+                        recipe: favorites[index],
+                        onTap: () => _openDetail(context, favorites[index]),
+                      ),
+                    ),
+                  ),
+                _SectionHeader(title: 'Made by you', count: myRecipes.length),
+                if (myRecipes.isEmpty)
+                  EmptyState(
+                    icon: Icons.menu_book_outlined,
+                    title: 'No recipes yet',
+                    message:
+                        'Add your own budget meal and see its protein per peso.',
+                    actionLabel: 'Create a recipe',
+                    onAction: () => _openForm(context),
+                  ),
+                for (final recipe in myRecipes) ...[
+                  RecipeValueCard(
+                    recipe: recipe,
+                    onTap: () => _openDetail(context, recipe),
+                    trailing: Row(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _SmallActionButton(
+                          icon: Icons.edit_outlined,
+                          tooltip: 'Edit',
+                          background: AppColors.background,
+                          color: AppColors.textMuted,
+                          onPressed: () => _openForm(context, recipe),
+                        ),
+                        const SizedBox(width: 6),
+                        _SmallActionButton(
+                          icon: Icons.delete_outline,
+                          tooltip: 'Delete',
+                          background: AppColors.errorLight,
+                          color: AppColors.error,
+                          onPressed: () => _confirmDelete(context, recipe),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                ],
+              ],
+            ),
+          ),
+        ],
       ),
     );
   }
 }
 
-/// DESIGN.md 6.2 large title with a caption below.
-class _LargeTitle extends StatelessWidget {
-  const _LargeTitle();
+/// White bar on the header's bottom edge that opens the New Recipe form,
+/// styled like the search bars on Home and Lookup.
+class _AddRecipeBar extends StatelessWidget {
+  const _AddRecipeBar({required this.onTap});
+
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'My Recipes',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
+    return HeaderBar(
+      child: Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          borderRadius: BorderRadius.circular(16),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.only(left: 14, right: 7),
+            child: Row(
+              children: [
+                const Icon(Icons.restaurant_menu, color: AppColors.textMuted),
+                const SizedBox(width: 10),
+                const Expanded(
+                  child: Text(
+                    'Add your own budget meal',
+                    style: TextStyle(fontSize: 14, color: AppColors.textMuted),
+                  ),
+                ),
+                Container(
+                  width: 38,
+                  height: 38,
+                  decoration: BoxDecoration(
+                    color: AppColors.primary,
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  child: const Icon(Icons.add, color: Colors.white),
+                ),
+              ],
+            ),
+          ),
         ),
-        SizedBox(height: 2),
-        Text(
-          'Meals you saved and meals you made',
-          style: TextStyle(fontSize: 12, color: AppColors.textMuted),
-        ),
-      ],
+      ),
     );
   }
 }
