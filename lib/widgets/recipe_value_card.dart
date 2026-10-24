@@ -5,11 +5,13 @@ import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
 import '../utils/formatters.dart';
 import 'cost_badge.dart';
+import 'favorite_button.dart';
 import 'recipe_card.dart';
 
 /// A [RecipeCard] filled in from [RecipeProvider]: protein and cost per
-/// serving in the caption, and a protein-per-peso badge. Home, Recipe
-/// List, and My Recipes all use it, so the numbers match on every screen.
+/// serving in the caption, a protein-per-peso badge, and a heart button
+/// unless [trailing] replaces it. Home, Recipe List, and My Recipes all
+/// use it, so the numbers match on every screen.
 class RecipeValueCard extends StatelessWidget {
   const RecipeValueCard({
     super.key,
@@ -39,7 +41,7 @@ class RecipeValueCard extends StatelessWidget {
               icon: Icons.bolt,
               label: formatProteinPerPeso(proteinPerPeso),
             ),
-      trailing: trailing,
+      trailing: trailing ?? FavoriteButton(recipe: recipe),
       onTap: onTap,
     );
   }

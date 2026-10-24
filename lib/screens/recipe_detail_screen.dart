@@ -10,6 +10,7 @@ import '../utils/nutrition_calculator.dart';
 import '../widgets/circle_icon_button.dart';
 import '../widgets/cost_badge.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/favorite_button.dart';
 import '../widgets/macro_bar.dart';
 import '../widgets/recipe_image.dart';
 
@@ -107,7 +108,7 @@ class RecipeDetailScreen extends StatelessWidget {
                 ),
               ],
             ),
-            // Floating back button stays put while the content scrolls.
+            // Floating back and favorite buttons stay put while content scrolls.
             Positioned(
               top: MediaQuery.paddingOf(context).top + 10,
               left: 18,
@@ -117,6 +118,11 @@ class RecipeDetailScreen extends StatelessWidget {
                 floating: true,
                 onPressed: () => Navigator.pop(context),
               ),
+            ),
+            Positioned(
+              top: MediaQuery.paddingOf(context).top + 10,
+              right: 18,
+              child: FavoriteButton(recipe: recipe, floating: true),
             ),
           ],
         ),
