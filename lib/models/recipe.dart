@@ -42,6 +42,8 @@ class Recipe {
     required this.emoji,
     required this.ingredients,
     required this.steps,
+    this.image,
+    this.imageCredit,
   });
 
   final String id;
@@ -53,6 +55,13 @@ class Recipe {
   final String emoji;
   final List<RecipeIngredient> ingredients;
   final List<String> steps;
+
+  /// Asset path of a food photo, or null to show [emoji] instead.
+  /// User recipes have no photo.
+  final String? image;
+
+  /// Author and license of [image], shown on Recipe Detail.
+  final String? imageCredit;
 
   factory Recipe.fromJson(Map<String, dynamic> json) {
     final rawIngredients = json['ingredients'] as List<dynamic>? ?? [];
@@ -69,6 +78,8 @@ class Recipe {
           )
           .toList(),
       steps: rawSteps.map((step) => step as String).toList(),
+      image: json['image'] as String?,
+      imageCredit: json['imageCredit'] as String?,
     );
   }
 
@@ -81,6 +92,9 @@ class Recipe {
       'emoji': emoji,
       'ingredients': ingredients.map((item) => item.toJson()).toList(),
       'steps': steps,
+      // Left out when null, so saved user recipes stay small.
+      if (image != null) 'image': image,
+      if (imageCredit != null) 'imageCredit': imageCredit,
     };
   }
 }
