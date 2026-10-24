@@ -41,6 +41,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     return Scaffold(
       body: SafeArea(
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTopBar(context, category ?? 'All recipes', recipes.length),
             _buildSortChips(),
