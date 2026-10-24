@@ -51,7 +51,10 @@ class AppColors {
       'ginisang-sardinas-with-egg' || 'chicken-tinola' => tintSea,
       'tokwat-itlog' => tintButter,
       'chicken-breast-adobo' => tintClay,
-      _ => _tints[recipeId.hashCode.abs() % _tints.length],
+      // Sum of the id's character codes. String.hashCode can change between
+      // app launches, so it would give the same recipe a different color.
+      _ =>
+        _tints[recipeId.codeUnits.fold(0, (sum, c) => sum + c) % _tints.length],
     };
   }
 }
