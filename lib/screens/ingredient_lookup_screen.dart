@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/food.dart';
+import '../providers/recipe_provider.dart';
 import '../services/usda_service.dart';
 import '../theme/app_colors.dart';
 import '../widgets/empty_state.dart';
+import '../widgets/gradient_header.dart';
 import '../widgets/macro_bar.dart';
 
 /// The five things the Lookup screen can show. Exactly one is active.
@@ -103,79 +106,72 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 18),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const SizedBox(height: 16),
-              _buildHeader(context),
-              const SizedBox(height: 16),
-              _buildSearchField(context),
-              const SizedBox(height: 16),
-              Expanded(child: _buildBody()),
-            ],
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          GradientHeader(
+            overlap: _buildSearchBar(),
+            child: const GradientHeaderTitle(
+              title: 'Lookup',
+              subtitle: 'Protein and calories per 100 g, from USDA',
+            ),
           ),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.fromLTRB(18, 16, 18, 0),
+              child: _buildBody(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  /// Room under scrolling lists so the last item clears the floating dock.
+  double get _bottomPadding => MediaQuery.paddingOf(context).bottom + 16;
+
+  /// White search field sitting on the header's bottom edge.
+  Widget _buildSearchBar() {
+    return HeaderBar(
+      child: TextField(
+        controller: _controller,
+        textInputAction: TextInputAction.search,
+        textAlignVertical: TextAlignVertical.center,
+        onChanged: _onQueryChanged,
+        onSubmitted: _search,
+        decoration: InputDecoration(
+          hintText: 'Search an ingredient, e.g. egg',
+          prefixIcon: const Icon(Icons.search),
+          suffixIcon: Padding(
+            padding: const EdgeInsets.all(6),
+            child: IconButton.filled(
+              tooltip: 'Search',
+              onPressed: () => _search(_controller.text),
+              icon: const Icon(Icons.arrow_forward),
+            ),
+          ),
+          // The white bar already draws the box, so the field has none.
+          filled: false,
+          border: InputBorder.none,
+          enabledBorder: InputBorder.none,
+          focusedBorder: InputBorder.none,
+          contentPadding: EdgeInsets.zero,
         ),
       ),
     );
   }
 
-  /// DESIGN.md 6.2 "Large title": Display title with a caption below.
-  Widget _buildHeader(BuildContext context) {
-    final muted = Theme.of(context).colorScheme.onSurfaceVariant;
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        const Text(
-          'Lookup',
-          style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800),
-        ),
-        const SizedBox(height: 2),
-        Text(
-          'Nutrition per 100 g from USDA',
-          style: TextStyle(fontSize: 12, color: muted),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildSearchField(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
-    return TextField(
-      controller: _controller,
-      textInputAction: TextInputAction.search,
-      onChanged: _onQueryChanged,
-      onSubmitted: _search,
-      decoration: InputDecoration(
-        hintText: 'Search an ingredient, e.g. egg',
-        prefixIcon: const Icon(Icons.search),
-        suffixIcon: Padding(
-          padding: const EdgeInsets.all(6),
-          child: IconButton.filled(
-            tooltip: 'Search',
-            onPressed: () => _search(_controller.text),
-            icon: const Icon(Icons.arrow_forward),
-          ),
-        ),
-        filled: true,
-        fillColor: colors.surfaceContainerLowest,
-        border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
-      ),
-    );
-  }
-
-  /// Common gym ingredients in a Filipino kitchen. Tapping one searches it.
-  static const _suggestions = [
-    'Egg',
-    'Chicken breast',
-    'Tofu',
-    'Canned tuna',
-    'Mung beans',
-    'Milkfish',
-    'Sardines',
-    'Ground pork',
+  /// Common gym ingredients and their USDA ids, which the built-in recipes
+  /// already use, so their nutrition is loaded by RecipeProvider.
+  static const _quickPicks = [
+    (label: 'Mung beans (dry)', query: 'Mung beans', fdcId: 174256),
+    (label: 'Chicken breast', query: 'Chicken breast', fdcId: 171077),
+    (label: 'Sardines', query: 'Sardines', fdcId: 175140),
+    (label: 'Milkfish', query: 'Milkfish', fdcId: 173675),
+    (label: 'Canned tuna', query: 'Canned tuna', fdcId: 334194),
+    (label: 'Tofu', query: 'Tofu', fdcId: 172475),
+    (label: 'Ground pork', query: 'Ground pork', fdcId: 167902),
+    (label: 'Egg', query: 'Egg', fdcId: 171287),
   ];
 
   void _searchSuggestion(String text) {
@@ -212,32 +208,75 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
     };
   }
 
+  /// Idle state: the quick picks ranked by protein per 100 g. Falls back
+  /// to plain chips while the USDA data is still loading or unavailable.
   Widget _buildSuggestions() {
+    final provider = context.watch<RecipeProvider>();
+    final allLoaded = _quickPicks.every(
+      (pick) => provider.foodFor(pick.fdcId) != null,
+    );
+
     return ListView(
-      padding: const EdgeInsets.only(bottom: 16),
+      padding: EdgeInsets.only(bottom: _bottomPadding),
       children: [
         const Text(
-          'Popular gym ingredients',
+          'Protein per 100 g',
           style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
         ),
         const SizedBox(height: 4),
         const Text(
-          'Tap one to see its protein and calories per 100 g.',
+          'Common gym ingredients from the USDA data behind the recipes. '
+          'Tap one to look it up.',
           style: TextStyle(fontSize: 13, color: AppColors.textMuted),
         ),
         const SizedBox(height: 12),
-        Wrap(
-          spacing: 8,
-          runSpacing: 8,
-          children: [
-            for (final suggestion in _suggestions)
-              ActionChip(
-                label: Text(suggestion),
-                onPressed: () => _searchSuggestion(suggestion),
-              ),
-          ],
-        ),
+        if (allLoaded)
+          _buildRanking(provider)
+        else
+          Wrap(
+            spacing: 8,
+            runSpacing: 8,
+            children: [
+              for (final pick in _quickPicks)
+                ActionChip(
+                  label: Text(pick.query),
+                  onPressed: () => _searchSuggestion(pick.query),
+                ),
+            ],
+          ),
       ],
+    );
+  }
+
+  /// One white panel with a row per ingredient, highest protein first.
+  /// Each bar is scaled to the top ingredient. Only called once every
+  /// quick pick has its USDA food, so the ! below is safe.
+  Widget _buildRanking(RecipeProvider provider) {
+    double proteinOf(int fdcId) => provider.foodFor(fdcId)!.protein;
+    final sorted = [..._quickPicks]
+      ..sort((a, b) => proteinOf(b.fdcId).compareTo(proteinOf(a.fdcId)));
+    final top = proteinOf(sorted.first.fdcId);
+
+    return Container(
+      decoration: BoxDecoration(
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
+        borderRadius: BorderRadius.circular(18),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: Column(
+        children: [
+          for (var i = 0; i < sorted.length; i++) ...[
+            if (i > 0) const Divider(height: 1),
+            _RankingRow(
+              label: sorted[i].label,
+              protein: proteinOf(sorted[i].fdcId),
+              fraction: top == 0 ? 0 : proteinOf(sorted[i].fdcId) / top,
+              onTap: () => _searchSuggestion(sorted[i].query),
+            ),
+          ],
+        ],
+      ),
     );
   }
 
@@ -273,7 +312,7 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
         const SizedBox(height: 10),
         Expanded(
           child: ListView.separated(
-            padding: const EdgeInsets.only(bottom: 16),
+            padding: EdgeInsets.only(bottom: _bottomPadding),
             itemCount: foods.length,
             separatorBuilder: (_, _) => const SizedBox(height: 10),
             itemBuilder: (context, index) =>
@@ -374,6 +413,69 @@ class _FoodResultCard extends StatelessWidget {
             fraction: proteinShare,
           ),
         ],
+      ),
+    );
+  }
+}
+
+/// One ingredient in the protein ranking: name, a bar scaled to the top
+/// ingredient, and grams of protein per 100 g.
+class _RankingRow extends StatelessWidget {
+  const _RankingRow({
+    required this.label,
+    required this.protein,
+    required this.fraction,
+    required this.onTap,
+  });
+
+  final String label;
+  final double protein;
+  final double fraction;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 128,
+              child: Text(
+                label,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            Expanded(
+              child: ClipRRect(
+                borderRadius: BorderRadius.circular(6),
+                child: LinearProgressIndicator(
+                  value: fraction.clamp(0.0, 1.0),
+                  minHeight: 10,
+                  backgroundColor: const Color(0xFFE3EAE6),
+                  color: AppColors.primary,
+                ),
+              ),
+            ),
+            SizedBox(
+              width: 64,
+              child: Text(
+                "${protein.toStringAsFixed(1)} g",
+                textAlign: TextAlign.right,
+                style: const TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.primaryDark,
+                ),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
