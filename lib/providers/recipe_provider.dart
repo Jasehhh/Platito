@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
@@ -118,8 +119,9 @@ class RecipeProvider extends ChangeNotifier {
     _errorMessage = null;
     notifyListeners();
     await _storageService.saveRecipes(_userRecipes);
-    await _fetchNutrition();
-    notifyListeners();
+    // Nutrition loads in the background, so the form can close right away
+    // instead of waiting for USDA.
+    unawaited(_fetchNutrition().then((_) => notifyListeners()));
   }
 
   /// Fetches nutrition again, for example after the user goes back online.
