@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/food.dart';
 import '../services/usda_service.dart';
-import '../widgets/cost_badge.dart';
+import '../theme/app_colors.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/macro_bar.dart';
 
@@ -27,6 +27,7 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
   List<Food> _foods = [];
   String _errorMessage = '';
   String _lastQuery = '';
+  bool _sortByProtein = false;
 
   /// Goes up by one for every search. A result is only shown if its id
   /// still matches, so an older, slower search can't overwrite a newer one.
@@ -165,24 +166,34 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
     );
   }
 
+  /// Common gym ingredients in a Filipino kitchen. Tapping one searches it.
+  static const _suggestions = [
+    'Egg',
+    'Chicken breast',
+    'Tofu',
+    'Canned tuna',
+    'Mung beans',
+    'Milkfish',
+    'Sardines',
+    'Ground pork',
+  ];
+
+  void _searchSuggestion(String text) {
+    _controller.text = text;
+    _search(text);
+  }
+
+  /// Results in USDA's order, or with the most protein per 100 g first.
+  List<Food> get _sortedFoods {
+    if (!_sortByProtein) return _foods;
+    return [..._foods]..sort((a, b) => b.protein.compareTo(a.protein));
+  }
+
   Widget _buildBody() {
     return switch (_status) {
-      _LookupStatus.idle => const SingleChildScrollView(
-        child: EmptyState(
-          icon: Icons.manage_search,
-          title: 'Look up any ingredient',
-          message:
-              'Type a food like egg, chicken, or rice to see its calories '
-              'and protein.',
-        ),
-      ),
+      _LookupStatus.idle => _buildSuggestions(),
       _LookupStatus.loading => const Center(child: CircularProgressIndicator()),
-      _LookupStatus.results => ListView.separated(
-        padding: const EdgeInsets.only(bottom: 16),
-        itemCount: _foods.length,
-        separatorBuilder: (_, _) => const SizedBox(height: 10),
-        itemBuilder: (context, index) => _FoodResultCard(food: _foods[index]),
-      ),
+      _LookupStatus.results => _buildResults(),
       _LookupStatus.empty => SingleChildScrollView(
         child: EmptyState(
           icon: Icons.search_off,
@@ -200,10 +211,83 @@ class _IngredientLookupScreenState extends State<IngredientLookupScreen> {
       ),
     };
   }
+
+  Widget _buildSuggestions() {
+    return ListView(
+      padding: const EdgeInsets.only(bottom: 16),
+      children: [
+        const Text(
+          'Popular gym ingredients',
+          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        ),
+        const SizedBox(height: 4),
+        const Text(
+          'Tap one to see its protein and calories per 100 g.',
+          style: TextStyle(fontSize: 13, color: AppColors.textMuted),
+        ),
+        const SizedBox(height: 12),
+        Wrap(
+          spacing: 8,
+          runSpacing: 8,
+          children: [
+            for (final suggestion in _suggestions)
+              ActionChip(
+                label: Text(suggestion),
+                onPressed: () => _searchSuggestion(suggestion),
+              ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildResults() {
+    final foods = _sortedFoods;
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          children: [
+            Expanded(
+              child: Text(
+                '${foods.length} results',
+                style: const TextStyle(
+                  fontSize: 13,
+                  color: AppColors.textMuted,
+                ),
+              ),
+            ),
+            ChoiceChip(
+              label: const Text('Best match'),
+              selected: !_sortByProtein,
+              onSelected: (_) => setState(() => _sortByProtein = false),
+            ),
+            const SizedBox(width: 8),
+            ChoiceChip(
+              label: const Text('Most protein'),
+              selected: _sortByProtein,
+              onSelected: (_) => setState(() => _sortByProtein = true),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        Expanded(
+          child: ListView.separated(
+            padding: const EdgeInsets.only(bottom: 16),
+            itemCount: foods.length,
+            separatorBuilder: (_, _) => const SizedBox(height: 10),
+            itemBuilder: (context, index) =>
+                _FoodResultCard(food: foods[index]),
+          ),
+        ),
+      ],
+    );
+  }
 }
 
-/// One search result: food name, kcal per 100 g, a protein badge, and a
-/// bar showing how much of the calories come from protein.
+/// One search result. The protein per 100 g is the large number on the
+/// left, since that is what a gym user compares first. The bar shows how
+/// much of the calories come from protein.
 class _FoodResultCard extends StatelessWidget {
   const _FoodResultCard({required this.food});
 
@@ -211,7 +295,6 @@ class _FoodResultCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colors = Theme.of(context).colorScheme;
     // Protein has 4 kcal per gram.
     final proteinShare = food.calories == 0
         ? 0.0
@@ -220,15 +303,44 @@ class _FoodResultCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
-        color: colors.surfaceContainerLowest,
-        border: Border.all(color: colors.outlineVariant),
+        color: AppColors.surface,
+        border: Border.all(color: AppColors.border),
         borderRadius: BorderRadius.circular(18),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Container(
+                width: 72,
+                padding: const EdgeInsets.symmetric(vertical: 8),
+                decoration: BoxDecoration(
+                  color: AppColors.primaryLight,
+                  borderRadius: BorderRadius.circular(14),
+                ),
+                child: Column(
+                  children: [
+                    Text(
+                      food.protein.toStringAsFixed(1),
+                      style: const TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.w800,
+                        color: AppColors.primaryDark,
+                      ),
+                    ),
+                    const Text(
+                      'g protein',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: AppColors.primaryDark,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(width: 12),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -245,22 +357,17 @@ class _FoodResultCard extends StatelessWidget {
                     const SizedBox(height: 4),
                     Text(
                       '${food.calories.round()} kcal per 100 g',
-                      style: TextStyle(
+                      style: const TextStyle(
                         fontSize: 12,
-                        color: colors.onSurfaceVariant,
+                        color: AppColors.textMuted,
                       ),
                     ),
                   ],
                 ),
               ),
-              const SizedBox(width: 12),
-              CostBadge(
-                icon: Icons.fitness_center,
-                label: '${food.protein.toStringAsFixed(1)} g protein',
-              ),
             ],
           ),
-          const SizedBox(height: 10),
+          const SizedBox(height: 12),
           MacroBar(
             label: 'Protein',
             value: '${(proteinShare * 100).clamp(0, 100).round()}% kcal',
