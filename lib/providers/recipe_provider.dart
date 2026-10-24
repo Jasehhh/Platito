@@ -33,6 +33,9 @@ class RecipeProvider extends ChangeNotifier {
   /// Recipes the user created. Saved on the device by [_storageService].
   final List<Recipe> _userRecipes = [];
 
+  /// Ids of the recipes the user marked with a heart.
+  final Set<String> _favoriteIds = {};
+
   /// USDA food for each ingredient fdcId that has been fetched.
   final Map<int, Food> _foods = {};
 
@@ -59,8 +62,8 @@ class RecipeProvider extends ChangeNotifier {
     return null;
   }
 
-  /// Loads assets/recipes.json and the saved user recipes, then fetches
-  /// nutrition for their ingredients.
+  /// Loads assets/recipes.json, the saved user recipes, and favorites,
+  /// then fetches nutrition for their ingredients.
   Future<void> load() async {
     if (_isLoading) return;
     _isLoading = true;
@@ -78,6 +81,9 @@ class RecipeProvider extends ChangeNotifier {
       _userRecipes
         ..clear()
         ..addAll(await _storageService.loadRecipes());
+      _favoriteIds
+        ..clear()
+        ..addAll(await _storageService.loadFavoriteIds());
       // Show the recipes now, before the nutrition request finishes.
       notifyListeners();
     } catch (_) {
@@ -111,8 +117,23 @@ class RecipeProvider extends ChangeNotifier {
   /// Removes the user recipe with [id]. Built-in recipes are never removed.
   Future<void> deleteRecipe(String id) async {
     _userRecipes.removeWhere((item) => item.id == id);
+    final wasFavorite = _favoriteIds.remove(id);
     notifyListeners();
     await _storageService.saveRecipes(_userRecipes);
+    if (wasFavorite) await _storageService.saveFavoriteIds(_favoriteIds);
+  }
+
+  bool isFavorite(Recipe recipe) => _favoriteIds.contains(recipe.id);
+
+  /// Favorite recipes, in the same order as [recipes].
+  List<Recipe> get favoriteRecipes =>
+      recipes.where((recipe) => _favoriteIds.contains(recipe.id)).toList();
+
+  /// Adds [recipe] to favorites, or removes it if it is already there.
+  Future<void> toggleFavorite(Recipe recipe) async {
+    if (!_favoriteIds.remove(recipe.id)) _favoriteIds.add(recipe.id);
+    notifyListeners();
+    await _storageService.saveFavoriteIds(_favoriteIds);
   }
 
   Future<void> _saveAndFetch() async {
