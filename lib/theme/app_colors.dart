@@ -32,4 +32,26 @@ class AppColors {
   static const Color tintSea = Color(0xFFE4EEF9);
   static const Color tintButter = Color(0xFFFFF6D6);
   static const Color tintClay = Color(0xFFF6E7DD);
+
+  static const List<Color> _tints = [
+    tintEgg,
+    tintLeaf,
+    tintSea,
+    tintButter,
+    tintClay,
+  ];
+
+  /// Thumbnail tint for a recipe. Built-in recipes use the tints listed in
+  /// DESIGN.md; any other recipe gets one picked from its id, so the same
+  /// recipe always has the same color.
+  static Color tintFor(String recipeId) {
+    return switch (recipeId) {
+      'tortang-tuna' || 'arroz-caldo' => tintEgg,
+      'ginisang-monggo' || 'ginisang-okra-with-egg' => tintLeaf,
+      'ginisang-sardinas-with-egg' || 'chicken-tinola' => tintSea,
+      'tokwat-itlog' => tintButter,
+      'chicken-breast-adobo' => tintClay,
+      _ => _tints[recipeId.hashCode.abs() % _tints.length],
+    };
+  }
 }
