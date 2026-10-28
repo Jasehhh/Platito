@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/recipe.dart';
 import '../providers/recipe_provider.dart';
+import '../theme/app_colors.dart';
 import '../utils/constants.dart';
 import '../widgets/circle_icon_button.dart';
 import '../widgets/empty_state.dart';
@@ -75,7 +76,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
             _buildTopBar(context, title, recipes.length),
             if (search != null) ...[
               _buildSearchField(search.autofocus),
+              _buildChipLabel('Category'),
               _buildCategoryChips(),
+              _buildChipLabel('Sort by'),
             ],
             _buildSortChips(),
             Expanded(
@@ -173,6 +176,19 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
             ),
           ),
         ),
+      ),
+    );
+  }
+
+  /// Small muted caption above a chip group in search mode, so the
+  /// category row and the sort row are easy to tell apart. The chips'
+  /// own top padding adds the space under it.
+  Widget _buildChipLabel(String text) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(18, 10, 18, 0),
+      child: Text(
+        text,
+        style: const TextStyle(fontSize: 12, color: AppColors.textMuted),
       ),
     );
   }
