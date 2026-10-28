@@ -131,6 +131,30 @@ assets/
 docs/                 Debugging case, release build notes, photo credits, screenshots
 ```
 
+## Test summary
+
+The app was tested manually. Unit tests were not included, at the
+instructor's request.
+
+**Where tested:** Android emulator (Android 17 / API 37) with both the debug
+and the release APK, and Chrome (web) for the wide-screen layout.
+
+| Area | What was tested | Result |
+|---|---|---|
+| Navigation | Home → category → Recipe List → Recipe Detail; "See all"; bottom dock tabs | Pass |
+| Sorting | Best value, Protein, and Cheapest each give the correct order | Pass |
+| API | Recipe Detail nutrition from USDA; Lookup search ("egg", and "chicken" with 20 results); Best match / Most protein toggle | Pass |
+| Error handling | Network off shows "Can't reach USDA. Check your connection." with Retry; Retry after reconnecting loads results; an empty search does nothing; "No results" state | Pass |
+| CRUD | Create (validation errors shown first); edit (changing servings updates cost per serving and g/₱); delete with a confirmation dialog | Pass |
+| Persistence | User recipes and favorites remain after force-stop and relaunch | Pass |
+| Release build | Release APK installs and a USDA search works; no DEBUG banner | Pass |
+| Wide screens | Web stays in a centered 480 px column; phone layout unchanged | Pass |
+
+`flutter analyze`: no issues. `dart format`: no changes.
+
+**Known cosmetic issue:** on Recipe Detail, the floating back button overlaps
+the title when the page is scrolled.
+
 ## Debugging case
 
 During testing, the Lookup screen showed a connection error even though the
