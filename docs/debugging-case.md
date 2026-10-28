@@ -42,11 +42,16 @@ the service at an unreachable host, which raises the same `ClientException`
   `<uses-permission android:name="android.permission.INTERNET"/>` to the main
   manifest. Flutter only puts this line in the *debug* manifest, so debug runs
   on a phone work, but a **release APK** would block every request and show
-  "No internet connection" even with good Wi-Fi.
+  "Can't reach USDA. Check your connection." even with good Wi-Fi.
 - **Clearer messages.** Each kind of failure now has its own text:
-  - `http.ClientException` (offline, DNS or socket failure): "No internet connection."
+  - `http.ClientException` (offline, DNS or socket failure): "Can't reach USDA. Check your connection."
   - `TimeoutException`: "The request timed out. Please try again."
-  - Anything else: "Something went wrong. Please try again."
+  - Status code other than 200: "USDA request failed (status N)."
+  - Unexpected data (caught in `RecipeProvider`, the Lookup screen, and the
+    ingredient search sheet): "Something went wrong. Please try again."
+
+  The offline message was first "No internet connection." It was later
+  reworded to the text above in commit `d882d7a`.
 - Removed the temporary `debugPrint` lines.
 
 ![Results after the fix](screenshots/debug-after-results.png)
