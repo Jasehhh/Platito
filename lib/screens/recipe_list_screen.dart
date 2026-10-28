@@ -178,21 +178,21 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   }
 
   /// Single-select category filter for search mode. "All" is a null
-  /// category.
+  /// category. Wrap moves chips that don't fit to the next line, so every
+  /// category stays visible.
   Widget _buildCategoryChips() {
-    return SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
+    return Padding(
       padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
-      child: Row(
+      child: Wrap(
+        spacing: 8,
+        runSpacing: 8,
         children: [
-          for (final category in [null, ...recipeCategories]) ...[
+          for (final category in [null, ...recipeCategories])
             ChoiceChip(
               label: Text(category ?? 'All'),
               selected: _category == category,
               onSelected: (_) => setState(() => _category = category),
             ),
-            const SizedBox(width: 8),
-          ],
         ],
       ),
     );
