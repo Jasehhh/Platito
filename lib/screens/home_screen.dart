@@ -9,6 +9,7 @@ import '../widgets/category_tile.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/home_header.dart';
 import '../widgets/recipe_value_card.dart';
+import 'recipe_list_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -19,6 +20,17 @@ class HomeScreen extends StatelessWidget {
   /// Opens Recipe List. A null [category] shows every recipe.
   void _openList(BuildContext context, String? category) {
     Navigator.pushNamed(context, Routes.recipeList, arguments: category);
+  }
+
+  /// Opens Recipe List in search mode. The filter button passes
+  /// autofocus: false so the keyboard stays closed while the user picks
+  /// a category.
+  void _openSearch(BuildContext context, {bool autofocus = true}) {
+    Navigator.pushNamed(
+      context,
+      Routes.recipeList,
+      arguments: RecipeSearchArgs(autofocus: autofocus),
+    );
   }
 
   @override
@@ -37,7 +49,10 @@ class HomeScreen extends StatelessWidget {
           bottom: MediaQuery.paddingOf(context).bottom + 16,
         ),
         children: [
-          HomeHeader(onSearchTap: () => _openList(context, null)),
+          HomeHeader(
+            onSearchTap: () => _openSearch(context),
+            onFilterTap: () => _openSearch(context, autofocus: false),
+          ),
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: Column(
