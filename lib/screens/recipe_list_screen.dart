@@ -36,6 +36,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   final _searchController = TextEditingController();
   String _query = '';
 
+  /// Category picked in search mode. Null means "All".
+  String? _category;
+
   static const _sortLabels = {
     RecipeSort.proteinPerPeso: 'Best value',
     RecipeSort.protein: 'Protein',
@@ -52,7 +55,9 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
   Widget build(BuildContext context) {
     final arguments = ModalRoute.of(context)?.settings.arguments;
     final search = arguments is RecipeSearchArgs ? arguments : null;
-    final category = arguments is String ? arguments : null;
+    final category = search != null
+        ? _category
+        : (arguments is String ? arguments : null);
     final provider = context.watch<RecipeProvider>();
     final recipes = provider.sortRecipes(
       _matchingRecipes(provider, category),
@@ -68,7 +73,10 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             _buildTopBar(context, title, recipes.length),
-            if (search != null) _buildSearchField(search.autofocus),
+            if (search != null) ...[
+              _buildSearchField(search.autofocus),
+              _buildCategoryChips(),
+            ],
             _buildSortChips(),
             Expanded(
               child: _buildBody(context, provider, recipes, search != null),
@@ -169,6 +177,27 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
     );
   }
 
+  /// Single-select category filter for search mode. "All" is a null
+  /// category.
+  Widget _buildCategoryChips() {
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.fromLTRB(18, 8, 18, 0),
+      child: Row(
+        children: [
+          for (final category in [null, ...recipeCategories]) ...[
+            ChoiceChip(
+              label: Text(category ?? 'All'),
+              selected: _category == category,
+              onSelected: (_) => setState(() => _category = category),
+            ),
+            const SizedBox(width: 8),
+          ],
+        ],
+      ),
+    );
+  }
+
   Widget _buildSortChips() {
     return SingleChildScrollView(
       scrollDirection: Axis.horizontal,
@@ -203,7 +232,7 @@ class _RecipeListScreenState extends State<RecipeListScreen> {
         child: EmptyState(
           icon: Icons.search_off,
           title: 'No recipes found',
-          message: 'Try a shorter word or check the spelling.',
+          message: 'Try a shorter word or pick another category.',
         ),
       );
     }
