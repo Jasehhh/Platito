@@ -6,12 +6,11 @@ import 'gradient_header.dart';
 /// Home's version of [GradientHeader] (DESIGN.md section 6.1): app name,
 /// a Filipino greeting, and a search bar on the header's bottom edge.
 class HomeHeader extends StatelessWidget {
-  const HomeHeader({super.key, this.onSearchTap, this.onFilterTap});
+  const HomeHeader({super.key, this.onSearchTap});
 
   /// Called when the search bar is tapped. The search bar is a button that
   /// opens a search screen, not a text field.
   final VoidCallback? onSearchTap;
-  final VoidCallback? onFilterTap;
 
   /// "Good morning / afternoon / evening" in Filipino, based on the hour.
   static String greetingFor(DateTime time) {
@@ -23,7 +22,7 @@ class HomeHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GradientHeader(
-      overlap: _SearchBar(onTap: onSearchTap, onFilterTap: onFilterTap),
+      overlap: _SearchBar(onTap: onSearchTap),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -58,12 +57,11 @@ class HomeHeader extends StatelessWidget {
   }
 }
 
-/// White search bar button with a filter button on the right.
+/// White search bar button.
 class _SearchBar extends StatelessWidget {
-  const _SearchBar({this.onTap, this.onFilterTap});
+  const _SearchBar({this.onTap});
 
   final VoidCallback? onTap;
-  final VoidCallback? onFilterTap;
 
   @override
   Widget build(BuildContext context) {
@@ -73,36 +71,16 @@ class _SearchBar extends StatelessWidget {
         child: InkWell(
           borderRadius: BorderRadius.circular(16),
           onTap: onTap,
-          child: Padding(
-            padding: const EdgeInsets.only(left: 14, right: 7),
+          child: const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
             child: Row(
               children: [
-                const Icon(Icons.search, color: AppColors.textMuted),
-                const SizedBox(width: 10),
-                const Expanded(
+                Icon(Icons.search, color: AppColors.textMuted),
+                SizedBox(width: 10),
+                Expanded(
                   child: Text(
                     'Search budget meals',
                     style: TextStyle(fontSize: 14, color: AppColors.textMuted),
-                  ),
-                ),
-                Material(
-                  color: AppColors.primaryLight,
-                  borderRadius: BorderRadius.circular(12),
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: onFilterTap,
-                    child: const SizedBox(
-                      width: 38,
-                      height: 38,
-                      child: Tooltip(
-                        message: 'Filter',
-                        child: Icon(
-                          Icons.tune,
-                          color: AppColors.primaryDark,
-                          size: 20,
-                        ),
-                      ),
-                    ),
                   ),
                 ),
               ],

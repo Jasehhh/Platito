@@ -22,14 +22,12 @@ class HomeScreen extends StatelessWidget {
     Navigator.pushNamed(context, Routes.recipeList, arguments: category);
   }
 
-  /// Opens Recipe List in search mode. The filter button passes
-  /// autofocus: false so the keyboard stays closed while the user picks
-  /// a category.
-  void _openSearch(BuildContext context, {bool autofocus = true}) {
+  /// Opens Recipe List in search mode with the keyboard open.
+  void _openSearch(BuildContext context) {
     Navigator.pushNamed(
       context,
       Routes.recipeList,
-      arguments: RecipeSearchArgs(autofocus: autofocus),
+      arguments: const RecipeSearchArgs(),
     );
   }
 
@@ -49,10 +47,7 @@ class HomeScreen extends StatelessWidget {
           bottom: MediaQuery.paddingOf(context).bottom + 16,
         ),
         children: [
-          HomeHeader(
-            onSearchTap: () => _openSearch(context),
-            onFilterTap: () => _openSearch(context, autofocus: false),
-          ),
+          HomeHeader(onSearchTap: () => _openSearch(context)),
           Padding(
             padding: const EdgeInsets.fromLTRB(18, 20, 18, 0),
             child: Column(
