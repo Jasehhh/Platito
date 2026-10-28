@@ -43,6 +43,8 @@ each recipe.
   and a "See all" link.
 - **Recipe list:** 18 built-in recipes, filtered by category, with three sorts:
   Best value (protein per peso), Protein, and Cheapest.
+- **Recipe search:** search recipes by title from the Home search bar, with
+  category filters (Budget Meals, High Protein, Bulking, Cutting) and sorting.
 - **Recipe detail:** photo, total cost, protein per peso, calories, protein,
   carbs, and fat per serving, the ingredient list with grams and prices, and
   numbered steps.
@@ -149,6 +151,7 @@ and the release APK, and Chrome (web) for the wide-screen layout.
 | Persistence | User recipes and favorites remain after force-stop and relaunch | Pass |
 | Release build | Release APK installs and a USDA search works; no DEBUG banner | Pass |
 | Wide screens | Web stays in a centered 480 px column; phone layout unchanged | Pass |
+| Search | Title search ("tuna", "chicken", partial "tor"); no-match state; clear button; category filters; sorting while filtered | Pass |
 
 `flutter analyze`: no issues. `dart format`: no changes.
 
